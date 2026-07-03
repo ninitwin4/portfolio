@@ -1,9 +1,11 @@
 'use client'
 import { AnimatedBackground } from '@/components/ui/animated-background'
-import { TextLoop } from '@/components/ui/text-loop'
+import { Magnetic } from '@/components/ui/magnetic'
 import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
+import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
+import { FOOTER_SOCIAL_LINKS } from './data'
 
 const THEMES_OPTIONS = [
   {
@@ -66,16 +68,34 @@ function ThemeSwitch() {
   )
 }
 
+function FooterLink({ children, href }: { children: ReactNode; href: string }) {
+  const isEmail = href.startsWith('mailto:')
+
+  return (
+    <Magnetic springOptions={{ bounce: 0 }} intensity={0.3}>
+      <a
+        href={href}
+        target={isEmail ? undefined : '_blank'}
+        rel={isEmail ? undefined : 'noopener noreferrer'}
+        className="group relative inline-flex shrink-0 items-center gap-[1px] rounded-full bg-zinc-100 px-2.5 py-1 text-sm text-black transition-colors duration-200 hover:bg-zinc-950 hover:text-zinc-50 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
+      >
+        {children}
+      </a>
+    </Magnetic>
+  )
+}
+
 export function Footer() {
   return (
     <footer className="mt-24 border-t border-zinc-100 px-0 py-4 dark:border-zinc-800">
-      <div className="flex items-center justify-between">
-        <a href="https://github.com/ibelick/nim" target="_blank">
-          <TextLoop className="text-xs text-zinc-500">
-            <span>© 2024 Nim.</span>
-            <span>Built with Motion-Primitives.</span>
-          </TextLoop>
-        </a>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap items-center gap-2">
+          {FOOTER_SOCIAL_LINKS.map((link) => (
+            <FooterLink key={link.label} href={link.href}>
+              {link.label}
+            </FooterLink>
+          ))}
+        </div>
         <div className="text-xs text-zinc-400">
           <ThemeSwitch />
         </div>
