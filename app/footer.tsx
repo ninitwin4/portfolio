@@ -39,7 +39,7 @@ function ThemeSwitch() {
 
   return (
     <AnimatedBackground
-      className="pointer-events-none rounded-lg bg-zinc-100 dark:bg-zinc-800"
+      className="pointer-events-none rounded-lg bg-surface"
       defaultValue={theme}
       transition={{
         type: 'spring',
@@ -55,7 +55,7 @@ function ThemeSwitch() {
         return (
           <button
             key={theme.id}
-            className="inline-flex h-7 w-7 items-center justify-center text-zinc-500 transition-colors duration-100 focus-visible:outline-2 data-[checked=true]:text-zinc-950 dark:text-zinc-400 dark:data-[checked=true]:text-zinc-50"
+            className="inline-flex h-7 w-7 items-center justify-center text-muted transition-colors duration-100 focus-visible:outline-2 data-[checked=true]:text-accent"
             type="button"
             aria-label={`Switch to ${theme.label} theme`}
             data-id={theme.id}
@@ -77,7 +77,7 @@ function FooterLink({ children, href }: { children: ReactNode; href: string }) {
         href={href}
         target={isEmail ? undefined : '_blank'}
         rel={isEmail ? undefined : 'noopener noreferrer'}
-        className="group relative inline-flex shrink-0 items-center gap-[1px] rounded-full bg-zinc-100 px-2.5 py-1 text-sm text-black transition-colors duration-200 hover:bg-zinc-950 hover:text-zinc-50 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
+        className="group relative inline-flex shrink-0 items-center gap-[1px] rounded-full border border-border bg-surface px-2.5 py-1 text-sm text-foreground transition-colors duration-200 hover:border-accent/40 hover:text-accent"
       >
         {children}
       </a>
@@ -87,7 +87,7 @@ function FooterLink({ children, href }: { children: ReactNode; href: string }) {
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-zinc-100 px-0 py-4 dark:border-zinc-800">
+    <footer className="mt-24 border-t border-border px-0 py-4">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-2">
           {FOOTER_SOCIAL_LINKS.map((link) => (
@@ -96,7 +96,7 @@ export function Footer() {
             </FooterLink>
           ))}
         </div>
-        <div className="text-xs text-zinc-400">
+        <div className="text-xs text-muted">
           <ThemeSwitch />
         </div>
       </div>

@@ -1,5 +1,6 @@
 'use client'
-import { motion } from 'motion/react'
+
+import { motion, useReducedMotion } from 'motion/react'
 import type { ReactNode } from 'react'
 import { Spotlight } from '@/components/ui/spotlight'
 import { Magnetic } from '@/components/ui/magnetic'
@@ -7,6 +8,12 @@ import { TextEffect } from '@/components/ui/text-effect'
 import Link from 'next/link'
 import { AnimatedBackground } from '@/components/ui/animated-background'
 import { ContactForm } from '@/components/contact-form'
+import {
+  cardHover,
+  cardHoverTransition,
+  getSectionReveal,
+  sectionRevealTransition,
+} from '@/lib/motion'
 import {
   ABOUT,
   BLOG_ENABLED,
@@ -17,24 +24,16 @@ import {
   TIMELINE,
 } from './data'
 
-const VARIANTS_CONTAINER = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-}
+const SECTION_VIEWPORT = { once: true, margin: '-10% 0px' as const }
 
-const VARIANTS_SECTION = {
-  hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
-  visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
-}
+const heroTitleClass =
+  'hero-gradient-text text-4xl font-medium leading-tight text-balance sm:text-5xl'
 
-const TRANSITION_SECTION = {
-  duration: 0.3,
-}
+const sectionHeadingClass =
+  'font-mono text-base font-medium uppercase tracking-widest text-accent-violet'
+
+const pillLinkClass =
+  'group relative inline-flex shrink-0 items-center gap-[1px] rounded-full border border-border bg-surface px-2.5 py-1 text-sm text-foreground transition-colors duration-200 hover:border-accent/40 hover:text-accent'
 
 function MagneticLink({
   children,
@@ -52,7 +51,7 @@ function MagneticLink({
         href={href}
         target={isEmail || isInternal ? undefined : '_blank'}
         rel={isEmail || isInternal ? undefined : 'noopener noreferrer'}
-        className="group relative inline-flex shrink-0 items-center gap-[1px] rounded-full bg-zinc-100 px-2.5 py-1 text-sm text-black transition-colors duration-200 hover:bg-zinc-950 hover:text-zinc-50 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
+        className={pillLinkClass}
       >
         {children}
         {!isEmail && !isInternal && (
@@ -78,23 +77,23 @@ function MagneticLink({
 }
 
 export default function Home() {
+  const prefersReducedMotion = useReducedMotion() ?? false
+  const sectionReveal = getSectionReveal(prefersReducedMotion)
+
   return (
-    <motion.main
-      className="space-y-24"
-      variants={VARIANTS_CONTAINER}
-      initial="hidden"
-      animate="visible"
-    >
+    <motion.main className="space-y-24" initial={false}>
       <motion.section
         id="hero"
-        variants={VARIANTS_SECTION}
-        transition={TRANSITION_SECTION}
+        variants={sectionReveal}
+        initial="hidden"
+        animate="visible"
+        transition={sectionRevealTransition}
       >
         <TextEffect
           as="h1"
           preset="fade"
           per="char"
-          className="text-2xl font-medium text-black dark:text-white"
+          className={heroTitleClass}
           delay={0.2}
         >
           {HERO.name}
@@ -103,14 +102,12 @@ export default function Home() {
           as="p"
           preset="fade"
           per="char"
-          className="mt-1 text-zinc-600 dark:text-zinc-500"
+          className="mt-1 text-xl text-muted"
           delay={0.5}
         >
           {HERO.title}
         </TextEffect>
-        <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-          {HERO.tagline}
-        </p>
+        <p className="mt-4 text-muted">{HERO.tagline}</p>
         <div className="mt-6 flex flex-wrap items-center gap-2">
           {HERO_LINKS.map((link) => (
             <MagneticLink key={link.label} href={link.href}>
@@ -122,41 +119,49 @@ export default function Home() {
 
       <motion.section
         id="about"
-        variants={VARIANTS_SECTION}
-        transition={TRANSITION_SECTION}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={SECTION_VIEWPORT}
+        transition={sectionRevealTransition}
       >
-        <h2 className="mb-5 text-lg font-medium">About</h2>
-        <p className="text-zinc-600 dark:text-zinc-400">{ABOUT.text}</p>
+        <h2 className={`${sectionHeadingClass} mb-5`}>
+          About
+        </h2>
+        <p className="text-muted">{ABOUT.text}</p>
       </motion.section>
 
       <motion.section
         id="projects"
-        variants={VARIANTS_SECTION}
-        transition={TRANSITION_SECTION}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={SECTION_VIEWPORT}
+        transition={sectionRevealTransition}
       >
-        <h2 className="mb-5 text-lg font-medium">Projects</h2>
+        <h2 className={`${sectionHeadingClass} mb-5`}>
+          Projects
+        </h2>
         <div className="flex flex-col gap-4">
           {PROJECTS.map((project) => (
-            <div
+            <motion.div
               key={project.id}
-              className="relative overflow-hidden rounded-2xl bg-zinc-300/30 p-[1px] dark:bg-zinc-600/30"
+              className="relative overflow-hidden rounded-2xl border border-border bg-surface p-[1px]"
+              whileHover={prefersReducedMotion ? undefined : cardHover}
+              transition={cardHoverTransition}
             >
               <Spotlight
-                className="from-zinc-900 via-zinc-800 to-zinc-700 blur-2xl dark:from-zinc-100 dark:via-zinc-200 dark:to-zinc-50"
+                className="from-accent/20 via-accent-violet/15 to-accent/20 blur-2xl"
                 size={64}
               />
-              <div className="relative rounded-[15px] bg-white p-4 dark:bg-zinc-950">
-                <h3 className="font-normal text-zinc-900 dark:text-zinc-100">
-                  {project.title}
-                </h3>
-                <p className="mt-1 text-zinc-600 dark:text-zinc-400">
-                  {project.description}
-                </p>
+              <div className="relative rounded-[15px] bg-surface p-4">
+                <h3 className="font-normal text-foreground">{project.title}</h3>
+                <p className="mt-1 text-muted">{project.description}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {project.tech.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+                      className="rounded-full border border-border bg-background px-2.5 py-0.5 font-mono text-xs text-muted"
                     >
                       {tag}
                     </span>
@@ -167,7 +172,7 @@ export default function Home() {
                     href={project.repoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-zinc-600 underline underline-offset-2 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                    className="text-muted underline underline-offset-2 transition-colors hover:text-accent"
                   >
                     Repo
                   </a>
@@ -175,44 +180,45 @@ export default function Home() {
                     href={project.demoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-zinc-600 underline underline-offset-2 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                    className="text-muted underline underline-offset-2 transition-colors hover:text-accent"
                   >
                     Demo
                   </a>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </motion.section>
 
       <motion.section
         id="timeline"
-        variants={VARIANTS_SECTION}
-        transition={TRANSITION_SECTION}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={SECTION_VIEWPORT}
+        transition={sectionRevealTransition}
       >
-        <h2 className="mb-5 text-lg font-medium">Timeline</h2>
+        <h2 className={`${sectionHeadingClass} mb-5`}>
+          Timeline
+        </h2>
         <div className="flex flex-col space-y-2">
           {TIMELINE.map((entry) => (
             <div
-              className="relative overflow-hidden rounded-2xl bg-zinc-300/30 p-[1px] dark:bg-zinc-600/30"
+              className="relative overflow-hidden rounded-2xl border border-border bg-surface p-[1px]"
               key={entry.id}
             >
               <Spotlight
-                className="from-zinc-900 via-zinc-800 to-zinc-700 blur-2xl dark:from-zinc-100 dark:via-zinc-200 dark:to-zinc-50"
+                className="from-accent/20 via-accent-violet/15 to-accent/20 blur-2xl"
                 size={64}
               />
-              <div className="relative h-full w-full rounded-[15px] bg-white p-4 dark:bg-zinc-950">
-                <div className="relative flex w-full flex-row justify-between">
+              <div className="relative h-full w-full rounded-[15px] bg-surface p-4">
+                <div className="relative flex w-full flex-col gap-1 sm:flex-row sm:justify-between">
                   <div>
-                    <h3 className="font-normal dark:text-zinc-100">
-                      {entry.title}
-                    </h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">
-                      {entry.description}
-                    </p>
+                    <h3 className="font-normal text-foreground">{entry.title}</h3>
+                    <p className="text-muted">{entry.description}</p>
                   </div>
-                  <p className="text-zinc-600 dark:text-zinc-400">
+                  <p className="shrink-0 font-mono text-sm text-muted">
                     {entry.date}
                   </p>
                 </div>
@@ -224,24 +230,34 @@ export default function Home() {
 
       <motion.section
         id="contact"
-        variants={VARIANTS_SECTION}
-        transition={TRANSITION_SECTION}
+        variants={sectionReveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={SECTION_VIEWPORT}
+        transition={sectionRevealTransition}
       >
-        <h2 className="mb-5 text-lg font-medium">Contact</h2>
+        <h2 className={`${sectionHeadingClass} mb-5`}>
+          Contact
+        </h2>
         <ContactForm />
       </motion.section>
 
       {BLOG_ENABLED && (
         <motion.section
           id="blog"
-          variants={VARIANTS_SECTION}
-          transition={TRANSITION_SECTION}
+          variants={sectionReveal}
+          initial="hidden"
+          whileInView="visible"
+          viewport={SECTION_VIEWPORT}
+          transition={sectionRevealTransition}
         >
-          <h2 className="mb-3 text-lg font-medium">Blog</h2>
+          <h2 className={`${sectionHeadingClass} mb-3`}>
+            Blog
+          </h2>
           <div className="flex flex-col space-y-0">
             <AnimatedBackground
               enableHover
-              className="h-full w-full rounded-lg bg-zinc-100 dark:bg-zinc-900/80"
+              className="h-full w-full rounded-lg bg-surface"
               transition={{
                 type: 'spring',
                 bounce: 0,
@@ -256,12 +272,8 @@ export default function Home() {
                   data-id={post.uid}
                 >
                   <div className="flex flex-col space-y-1">
-                    <h3 className="font-normal dark:text-zinc-100">
-                      {post.title}
-                    </h3>
-                    <p className="text-zinc-500 dark:text-zinc-400">
-                      {post.description}
-                    </p>
+                    <h3 className="font-normal text-foreground">{post.title}</h3>
+                    <p className="text-muted">{post.description}</p>
                   </div>
                 </Link>
               ))}
@@ -269,7 +281,6 @@ export default function Home() {
           </div>
         </motion.section>
       )}
-
     </motion.main>
   )
 }

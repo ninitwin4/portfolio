@@ -3,24 +3,30 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
+  Phase 4 theme tokens — tweak palette hex values here only.
 */
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
-  }
+@theme {
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --color-background: var(--theme-background);
+  --color-surface: var(--theme-surface);
+  --color-border: var(--theme-border);
+  --color-foreground: var(--theme-foreground);
+  --color-muted: var(--theme-muted);
+  --color-accent: var(--theme-accent);
+  --color-accent-violet: var(--theme-accent-violet);
 }
 
 :root {
+  --theme-background: #fafafa;
+  --theme-surface: #ffffff;
+  --theme-border: #e4e4e7;
+  --theme-foreground: #18181b;
+  --theme-muted: #71717a;
+  --theme-accent: #0891b2;
+  --theme-accent-violet: #7c3aed;
+
   --sh-class: #7aa2f7;
   --sh-sign: #89ddff;
   --sh-string: #9ece6a;
@@ -29,4 +35,58 @@
   --sh-jsxliterals: #7aa2f7;
   --sh-property: #73daca;
   --sh-entity: #e0af68;
+}
+
+.dark {
+  --theme-background: #0b0d12;
+  --theme-surface: #12151c;
+  --theme-border: #1e2430;
+  --theme-foreground: #eceef4;
+  --theme-muted: #8b93a7;
+  --theme-accent: #22d3ee;
+  --theme-accent-violet: #8b5cf6;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border, currentColor);
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.hero-gradient-text {
+  background-image: linear-gradient(
+    to right,
+    var(--theme-accent),
+    var(--theme-accent-violet),
+    var(--theme-accent)
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-gradient-text {
+    animation: gradient-shift 8s ease infinite;
+  }
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% center;
+  }
+
+  50% {
+    background-position: 100% center;
+  }
 }

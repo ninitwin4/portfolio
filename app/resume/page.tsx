@@ -15,15 +15,15 @@ export default function ResumePage() {
     <main className="space-y-6">
       <div className="space-y-3">
         <Link
-          className="text-sm text-zinc-500 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+          className="text-sm text-muted transition hover:text-accent"
           href="/"
         >
           Back home
         </Link>
-        <h1 className="text-2xl font-medium text-black dark:text-white">
+        <h1 className="text-4xl font-medium leading-tight text-balance text-foreground sm:text-5xl">
           Want my resume?
         </h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-muted">
           Enter your email and I&apos;ll send it right over.
         </p>
       </div>

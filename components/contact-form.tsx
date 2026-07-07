@@ -7,6 +7,9 @@ type FormState = {
   message: string
 }
 
+const inputClass =
+  'w-full rounded-xl bg-surface px-3 py-2 text-sm text-foreground outline-none ring-1 ring-border transition focus:ring-accent/50'
+
 export function ContactForm() {
   const [formState, setFormState] = useState<FormState>({
     status: 'idle',
@@ -74,11 +77,11 @@ export function ContactForm() {
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
       <div className="space-y-2">
-        <label className="text-sm text-zinc-600 dark:text-zinc-400" htmlFor="name">
+        <label className="font-mono text-xs uppercase tracking-wider text-muted" htmlFor="name">
           Name
         </label>
         <input
-          className="w-full rounded-xl bg-zinc-100 px-3 py-2 text-sm text-zinc-950 outline-none ring-1 ring-zinc-200 transition focus:ring-zinc-400 dark:bg-zinc-900 dark:text-zinc-50 dark:ring-zinc-800 dark:focus:ring-zinc-600"
+          className={inputClass}
           id="name"
           name="name"
           type="text"
@@ -88,11 +91,11 @@ export function ContactForm() {
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm text-zinc-600 dark:text-zinc-400" htmlFor="email">
+        <label className="font-mono text-xs uppercase tracking-wider text-muted" htmlFor="email">
           Email
         </label>
         <input
-          className="w-full rounded-xl bg-zinc-100 px-3 py-2 text-sm text-zinc-950 outline-none ring-1 ring-zinc-200 transition focus:ring-zinc-400 dark:bg-zinc-900 dark:text-zinc-50 dark:ring-zinc-800 dark:focus:ring-zinc-600"
+          className={inputClass}
           id="email"
           name="email"
           type="email"
@@ -103,13 +106,13 @@ export function ContactForm() {
 
       <div className="space-y-2">
         <label
-          className="text-sm text-zinc-600 dark:text-zinc-400"
+          className="font-mono text-xs uppercase tracking-wider text-muted"
           htmlFor="message"
         >
           Message
         </label>
         <textarea
-          className="min-h-32 w-full resize-y rounded-xl bg-zinc-100 px-3 py-2 text-sm text-zinc-950 outline-none ring-1 ring-zinc-200 transition focus:ring-zinc-400 dark:bg-zinc-900 dark:text-zinc-50 dark:ring-zinc-800 dark:focus:ring-zinc-600"
+          className={`${inputClass} min-h-32 resize-y`}
           id="message"
           name="message"
           required
@@ -117,7 +120,7 @@ export function ContactForm() {
       </div>
 
       <button
-        className="rounded-full bg-zinc-950 px-4 py-2 text-sm text-zinc-50 transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-50 dark:text-zinc-950 dark:hover:bg-zinc-300"
+        className="rounded-full border border-accent/30 bg-foreground px-4 py-2 text-sm text-background transition hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-60 dark:hover:bg-transparent dark:hover:text-accent"
         disabled={formState.status === 'loading'}
         type="submit"
       >
@@ -129,7 +132,7 @@ export function ContactForm() {
           className={
             formState.status === 'error'
               ? 'text-sm text-red-600 dark:text-red-400'
-              : 'text-sm text-zinc-600 dark:text-zinc-400'
+              : 'text-sm text-muted'
           }
         >
           {formState.message}
