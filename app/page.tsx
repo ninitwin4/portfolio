@@ -6,6 +6,7 @@ import { Magnetic } from '@/components/ui/magnetic'
 import { TextEffect } from '@/components/ui/text-effect'
 import Link from 'next/link'
 import { AnimatedBackground } from '@/components/ui/animated-background'
+import { ContactForm } from '@/components/contact-form'
 import {
   ABOUT,
   BLOG_ENABLED,
@@ -43,17 +44,18 @@ function MagneticLink({
   href: string
 }) {
   const isEmail = href.startsWith('mailto:')
+  const isInternal = href.startsWith('/')
 
   return (
     <Magnetic springOptions={{ bounce: 0 }} intensity={0.3}>
       <a
         href={href}
-        target={isEmail ? undefined : '_blank'}
-        rel={isEmail ? undefined : 'noopener noreferrer'}
+        target={isEmail || isInternal ? undefined : '_blank'}
+        rel={isEmail || isInternal ? undefined : 'noopener noreferrer'}
         className="group relative inline-flex shrink-0 items-center gap-[1px] rounded-full bg-zinc-100 px-2.5 py-1 text-sm text-black transition-colors duration-200 hover:bg-zinc-950 hover:text-zinc-50 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
       >
         {children}
-        {!isEmail && (
+        {!isEmail && !isInternal && (
           <svg
             width="15"
             height="15"
@@ -218,6 +220,15 @@ export default function Home() {
             </div>
           ))}
         </div>
+      </motion.section>
+
+      <motion.section
+        id="contact"
+        variants={VARIANTS_SECTION}
+        transition={TRANSITION_SECTION}
+      >
+        <h2 className="mb-5 text-lg font-medium">Contact</h2>
+        <ContactForm />
       </motion.section>
 
       {BLOG_ENABLED && (

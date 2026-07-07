@@ -44,6 +44,7 @@ export const HERO_LINKS: HeroLink[] = [
   { label: 'GitHub', href: 'https://github.com/ninitwin4' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ni-ni-tin-win/' },
   { label: 'YouTube', href: 'https://www.youtube.com/@journi_ni/shorts' },
+  { label: 'Resume', href: '/resume' },
 ]
 
 export const ABOUT = {
