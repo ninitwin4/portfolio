@@ -6,14 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "upload-resume": "node scripts/upload-resume.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",
     "@next/mdx": "^14.2.13",
     "@tailwindcss/typography": "^0.5.15",
+    "@vercel/blob": "^2.5.0",
     "@types/mdx": "^2.0.13",
+    "@vercel/blob": "^2.5.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.468.0",
     "motion": "^11.15.0",

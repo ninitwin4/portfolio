@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
+import { get } from '@vercel/blob'
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
@@ -51,7 +52,7 @@ function getEnv() {
   const fromEmail = process.env.RESEND_FROM_EMAIL
   const fromName = process.env.RESEND_FROM_NAME || 'Portfolio'
   const resumePath = process.env.RESUME_PDF_PATH || 'private/resume.pdf'
-  const resumePdfBase64 = process.env.RESUME_PDF_BASE64
+  const resumeBlobPathname = process.env.RESUME_BLOB_PATHNAME
 
   if (!apiKey || !toEmail || !fromEmail) {
     return null
@@ -63,13 +64,19 @@ function getEnv() {
     fromEmail,
     fromName,
     resumePath,
-    resumePdfBase64,
+    resumeBlobPathname,
   }
 }
 
 async function getResumeFile(env: NonNullable<ReturnType<typeof getEnv>>) {
-  if (env.resumePdfBase64) {
-    return Buffer.from(env.resumePdfBase64, 'base64')
+  if (env.resumeBlobPathname) {
+    const result = await get(env.resumeBlobPathname, { access: 'private' })
+
+    if (!result || result.statusCode !== 200 || !result.stream) {
+      throw new Error('Resume file not found in blob storage')
+    }
+
+    return Buffer.from(await new Response(result.stream).arrayBuffer())
   }
 
   return readFile(path.join(process.cwd(), env.resumePath))
