@@ -3,6 +3,7 @@ import path from 'node:path'
 import { get } from '@vercel/blob'
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import type { CreateEmailOptions } from 'resend'
 
 export const runtime = 'nodejs'
 
@@ -46,11 +47,24 @@ function escapeHtml(value: string) {
     .replaceAll("'", '&#039;')
 }
 
+function formatFromAddress(fromEmail: string, fromName: string) {
+  const email = fromEmail.trim()
+
+  if (email.includes('<') && email.includes('>')) {
+    return email
+  }
+
+  return `${fromName} <${email}>`
+}
+
 function getEnv() {
   const apiKey = process.env.RESEND_API_KEY
   const toEmail = process.env.CONTACT_TO_EMAIL
   const fromEmail = process.env.RESEND_FROM_EMAIL
-  const fromName = process.env.RESEND_FROM_NAME || 'Portfolio'
+  const fromName = (process.env.RESEND_FROM_NAME || 'Portfolio').replace(
+    /^["']|["']$/g,
+    '',
+  )
   const resumePath = process.env.RESUME_PDF_PATH || 'private/resume.pdf'
   const resumeBlobPathname = process.env.RESUME_BLOB_PATHNAME
 
@@ -65,6 +79,14 @@ function getEnv() {
     fromName,
     resumePath,
     resumeBlobPathname,
+  }
+}
+
+async function sendEmail(resend: Resend, options: CreateEmailOptions) {
+  const { error } = await resend.emails.send(options)
+
+  if (error) {
+    throw new Error(error.message)
   }
 }
 
@@ -105,8 +127,8 @@ async function handleContact(
     )
   }
 
-  await resend.emails.send({
-    from: `${env.fromName} <${env.fromEmail}>`,
+  await sendEmail(resend, {
+    from: formatFromAddress(env.fromEmail, env.fromName),
     to: env.toEmail,
     replyTo: email,
     subject: `Portfolio contact from ${name}`,
@@ -148,8 +170,8 @@ async function handleResume(
 
   const resumeFile = await getResumeFile(env)
 
-  await resend.emails.send({
-    from: `${env.fromName} <${env.fromEmail}>`,
+  await sendEmail(resend, {
+    from: formatFromAddress(env.fromEmail, env.fromName),
     to: email,
     subject: 'Ni Ni Tin Win Resume',
     html: `
@@ -160,12 +182,13 @@ async function handleResume(
       {
         filename: 'Ni-Ni-Tin-Win-Resume.pdf',
         content: resumeFile,
+        contentType: 'application/pdf',
       },
     ],
   })
 
-  await resend.emails.send({
-    from: `${env.fromName} <${env.fromEmail}>`,
+  await sendEmail(resend, {
+    from: formatFromAddress(env.fromEmail, env.fromName),
     to: env.toEmail,
     subject: 'Resume requested from portfolio',
     html: `
@@ -214,12 +237,16 @@ export async function POST(request: NextRequest) {
       400,
     )
   } catch (error) {
-    console.error('Email route failed:', error)
+    const detail = error instanceof Error ? error.message : 'Unknown error'
+    console.error('Email route failed:', detail)
 
     return jsonResponse(
       {
         ok: false,
-        message: 'Something went wrong sending the email. Please try again.',
+        message:
+          detail.includes('verify') || detail.includes('testing emails')
+            ? detail
+            : 'Something went wrong sending the email. Please try again.',
       },
       500,
     )
