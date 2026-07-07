@@ -2,7 +2,7 @@
 
 My personal portfolio site, built with Next.js, React, TypeScript, and Tailwind CSS.
 
-🔗 Live site: (coming soon)
+🔗 Live site: (https://ninitinwin.com/)
 
 ## Tech stack
 - Next.js 15 (App Router)
