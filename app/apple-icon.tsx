@@ -17,7 +17,7 @@ export default function AppleIcon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#0b0d12',
+          background: '#000000',
           borderRadius: 36,
         }}
       >
