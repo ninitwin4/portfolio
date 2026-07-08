@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { Footer } from './footer'
 import { ThemeProvider } from 'next-themes'
+import { HERO } from './data'
+import { WEBSITE_URL } from '@/lib/constants'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -10,17 +12,32 @@ export const viewport: Viewport = {
   themeColor: '#0b0d12',
 }
 
+const siteTitle = `${HERO.name} — ${HERO.title}`
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://nim-fawn.vercel.app/'),
+  metadataBase: new URL(WEBSITE_URL),
   alternates: {
-    canonical: '/'
+    canonical: '/',
   },
   title: {
-    default: 'Nim - Personal website template',
-    template: '%s | Nim'
+    default: siteTitle,
+    template: `%s | ${HERO.name}`,
   },
-  description:  'Nim is a free and open-source personal website template built with Next.js 15, React 19 and Motion-Primitives.',
-};
+  description: HERO.tagline,
+  openGraph: {
+    title: siteTitle,
+    description: HERO.tagline,
+    url: WEBSITE_URL,
+    siteName: HERO.name,
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: siteTitle,
+    description: HERO.tagline,
+  },
+}
 
 const geist = Geist({
   variable: '--font-geist',
