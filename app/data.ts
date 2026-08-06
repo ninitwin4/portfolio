@@ -48,7 +48,12 @@ export const HERO_LINKS: HeroLink[] = [
 ]
 
 export const ABOUT = {
-  text: "Co-founded and shipped a mobile app to 2,000+ users, then moved from front-end design toward AI engineering. Along the way, I supported AI model training and became the primary troubleshooter for home robotics systems. I thrive in fast-evolving environments and I'm looking to make a measurable impact in the US AI ecosystem.",
+  paragraphs: [
+    'I co-founded a consumer app and scaled it from 0 to 2,000+ users, then joined an AI robotics startup as an operator and was promoted within months to lead the team, helping grow the data operation from 25 operators to 130 across 10 sites.',
+    'I think like a PM and build like an engineer. Recently: a full-stack voice AI agent shipped in a single day – FastAPI backend, 13 endpoints, 9 wired as agent tools across three live third-party APIs – and a matching engine whose tiered pipeline cut LLM calls 86%, validated with a custom eval harness.',
+    'Three threads, one job: turning messy problems into systems that work – a data pipeline, a team, or a product. I do my best work where people run with a whole problem, not just their slice.',
+    "If there's a problem to solve, I find a way.",
+  ],
 }
 
 export const PROJECTS: Project[] = [

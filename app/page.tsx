@@ -129,7 +129,13 @@ export default function Home() {
         <h2 className={`${sectionHeadingClass} mb-5`}>
           About
         </h2>
-        <p className="text-muted">{ABOUT.text}</p>
+        <div className="space-y-4">
+          {ABOUT.paragraphs.map((paragraph) => (
+            <p key={paragraph} className="text-muted">
+              {paragraph}
+            </p>
+          ))}
+        </div>
       </motion.section>
 
       <motion.section
