@@ -8,12 +8,8 @@ import { TextEffect } from '@/components/ui/text-effect'
 import Link from 'next/link'
 import { AnimatedBackground } from '@/components/ui/animated-background'
 import { ContactForm } from '@/components/contact-form'
-import {
-  cardHover,
-  cardHoverTransition,
-  getSectionReveal,
-  sectionRevealTransition,
-} from '@/lib/motion'
+import { ProjectCard } from '@/components/project-card'
+import { getSectionReveal, sectionRevealTransition } from '@/lib/motion'
 import {
   ABOUT,
   BLOG_ENABLED,
@@ -140,6 +136,7 @@ export default function Home() {
 
       <motion.section
         id="projects"
+        className="scroll-mt-16"
         variants={sectionReveal}
         initial="hidden"
         whileInView="visible"
@@ -149,51 +146,13 @@ export default function Home() {
         <h2 className={`${sectionHeadingClass} mb-5`}>
           Projects
         </h2>
-        <div className="flex flex-col gap-4">
-          {PROJECTS.map((project) => (
-            <motion.div
-              key={project.id}
-              className="relative overflow-hidden rounded-2xl border border-border bg-surface p-[1px]"
-              whileHover={prefersReducedMotion ? undefined : cardHover}
-              transition={cardHoverTransition}
-            >
-              <Spotlight
-                className="from-accent/20 via-accent-violet/15 to-accent/20 blur-2xl"
-                size={64}
-              />
-              <div className="relative rounded-[15px] bg-surface p-4">
-                <h3 className="font-normal text-foreground">{project.title}</h3>
-                <p className="mt-1 text-muted">{project.description}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {project.tech.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-border bg-background px-2.5 py-0.5 font-mono text-xs text-muted"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-4 flex gap-4 text-sm">
-                  <a
-                    href={project.repoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted underline underline-offset-2 transition-colors hover:text-accent"
-                  >
-                    Repo
-                  </a>
-                  <a
-                    href={project.demoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted underline underline-offset-2 transition-colors hover:text-accent"
-                  >
-                    Demo
-                  </a>
-                </div>
-              </div>
-            </motion.div>
+        <div className="flex flex-col gap-6">
+          {PROJECTS.map((project, index) => (
+            <ProjectCard
+              key={project.slug}
+              project={project}
+              priority={index === 0}
+            />
           ))}
         </div>
       </motion.section>
