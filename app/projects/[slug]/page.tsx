@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ProjectMedia } from '@/components/project-media'
+import { Container } from '@/components/container'
 import {
   PROJECTS,
   getProject,
@@ -79,8 +80,9 @@ export default async function ProjectPage({ params }: PageProps) {
   const hero = project.hero ?? project.thumbnail
 
   return (
-    <main className="space-y-12">
-      <header className="space-y-5">
+    <Container>
+      <main className="space-y-12 pt-16">
+        <header className="space-y-5">
         <Link
           className="inline-block text-sm text-muted transition-colors hover:text-accent"
           href="/#projects"
@@ -175,14 +177,15 @@ export default async function ProjectPage({ params }: PageProps) {
         ))}
       </div>
 
-      <div className="border-t border-border pt-6">
-        <Link
-          className="text-sm text-muted transition-colors hover:text-accent"
-          href="/#projects"
-        >
-          ← Back to projects
-        </Link>
-      </div>
-    </main>
+        <div className="border-t border-border pt-6">
+          <Link
+            className="text-sm text-muted transition-colors hover:text-accent"
+            href="/#projects"
+          >
+            ← Back to projects
+          </Link>
+        </div>
+      </main>
+    </Container>
   )
 }

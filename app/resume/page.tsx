@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ResumeRequestForm } from '@/components/resume-request-form'
+import { Container } from '@/components/container'
 
 export const metadata: Metadata = {
   title: 'Resume Request',
@@ -12,7 +13,8 @@ export const metadata: Metadata = {
 
 export default function ResumePage() {
   return (
-    <main className="space-y-6">
+    <Container>
+      <main className="space-y-6 pt-16">
       <div className="space-y-3">
         <Link
           className="text-sm text-muted transition hover:text-accent"
@@ -28,7 +30,8 @@ export default function ResumePage() {
         </p>
       </div>
 
-      <ResumeRequestForm />
-    </main>
+        <ResumeRequestForm />
+      </main>
+    </Container>
   )
 }

@@ -90,6 +90,11 @@ export const HERO = {
   title: 'Building AI systems',
   tagline:
     'I care about making AI reliable - data quality, evaluation, and the human layer that makes models trustworthy.',
+  // Right-hand column of the hero. Condensed from the About section - edit freely.
+  intro: [
+    'Co-founded a consumer app and scaled it from 0 to 2,000+ users, then led AI data operations at a robotics startup, growing the team from 25 operators to 130 across 10 sites.',
+    'I think like a PM and build like an engineer. Currently deep in evaluation, agent tooling, and the messy parts of shipping AI that works.',
+  ],
 }
 
 export const HERO_LINKS: HeroLink[] = [

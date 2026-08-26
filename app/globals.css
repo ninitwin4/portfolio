@@ -61,6 +61,12 @@
   }
 }
 
+/* Display face for the hero name. Set here rather than via a Tailwind font
+   utility so it resolves against the next/font variable on <body> directly. */
+.hero-display {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+}
+
 .hero-gradient-text {
   background-image: linear-gradient(
     to right,
@@ -77,6 +83,23 @@
 @media (prefers-reduced-motion: no-preference) {
   .hero-gradient-text {
     animation: gradient-shift 8s ease infinite;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .animate-bounce-slow {
+    animation: bounce-slow 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes bounce-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(4px);
   }
 }
 

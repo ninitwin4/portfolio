@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { AnimatedBackground } from '@/components/ui/animated-background'
 import { ContactForm } from '@/components/contact-form'
 import { ProjectCard } from '@/components/project-card'
+import { Container } from '@/components/container'
 import { getSectionReveal, sectionRevealTransition } from '@/lib/motion'
 import {
   ABOUT,
@@ -23,7 +24,7 @@ import {
 const SECTION_VIEWPORT = { once: true, margin: '-10% 0px' as const }
 
 const heroTitleClass =
-  'hero-gradient-text text-4xl font-medium leading-tight text-balance sm:text-5xl'
+  'hero-display hero-gradient-text mt-4 text-[clamp(2.75rem,9vw,6rem)] font-bold leading-[1.05] tracking-[-0.03em] text-balance'
 
 const sectionHeadingClass =
   'font-mono text-base font-medium uppercase tracking-widest text-accent-violet'
@@ -78,44 +79,77 @@ export default function Home() {
   const sectionReveal = getSectionReveal(prefersReducedMotion)
 
   return (
-    <motion.main className="space-y-24" initial={false}>
-      <motion.section
+    <motion.main initial={false}>
+      {/* Full-bleed, one full screen tall, content anchored low.
+          Deliberately NOT wrapped in the scroll-reveal: this fills the whole
+          first screen, so gating its opacity on a JS animation means a blank
+          page if that animation never runs. TextEffect handles the entrance. */}
+      <section
         id="hero"
-        variants={sectionReveal}
-        initial="hidden"
-        animate="visible"
-        transition={sectionRevealTransition}
+        className="relative flex min-h-svh flex-col justify-center py-24"
       >
-        <TextEffect
-          as="h1"
-          preset="fade"
-          per="char"
-          className={heroTitleClass}
-          delay={0.2}
-        >
-          {HERO.name}
-        </TextEffect>
-        <TextEffect
-          as="p"
-          preset="fade"
-          per="char"
-          className="mt-1 text-xl text-muted"
-          delay={0.5}
-        >
-          {HERO.title}
-        </TextEffect>
-        <p className="mt-4 text-muted">{HERO.tagline}</p>
-        <div className="mt-6 flex flex-wrap items-center gap-2">
-          {HERO_LINKS.map((link) => (
-            <MagneticLink key={link.label} href={link.href}>
-              {link.label}
-            </MagneticLink>
-          ))}
-        </div>
-      </motion.section>
+        <Container>
+          <p className={sectionHeadingClass}>{HERO.title}</p>
+          <TextEffect
+            as="h1"
+            preset="fade"
+            per="char"
+            className={heroTitleClass}
+            delay={0.2}
+          >
+            {HERO.name}
+          </TextEffect>
 
+          <div className="mt-10 grid gap-8 sm:grid-cols-2 sm:gap-12">
+            <p className="text-lg leading-relaxed text-foreground text-balance">
+              {HERO.tagline}
+            </p>
+            <div className="space-y-3">
+              {HERO.intro.map((paragraph) => (
+                <p key={paragraph} className="text-sm leading-relaxed text-muted">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-10 flex flex-wrap items-center gap-2">
+            {HERO_LINKS.map((link) => (
+              <MagneticLink key={link.label} href={link.href}>
+                {link.label}
+              </MagneticLink>
+            ))}
+          </div>
+        </Container>
+
+        <Container className="absolute inset-x-0 bottom-10 hidden sm:block">
+          <a
+            href="#about"
+            aria-label="Scroll to about"
+            className="inline-flex text-muted transition-colors hover:text-accent"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.25"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className={prefersReducedMotion ? undefined : 'animate-bounce-slow'}
+            >
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </a>
+        </Container>
+      </section>
+
+      <Container className="space-y-24 pb-8">
       <motion.section
         id="about"
+        className="scroll-mt-16"
         variants={sectionReveal}
         initial="hidden"
         whileInView="visible"
@@ -247,6 +281,7 @@ export default function Home() {
           </div>
         </motion.section>
       )}
+      </Container>
     </motion.main>
   )
 }

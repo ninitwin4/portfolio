@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist, Geist_Mono, Poppins } from 'next/font/google'
 import './globals.css'
 import { Footer } from './footer'
 import { ThemeProvider } from 'next-themes'
 import { HERO } from './data'
 import { WEBSITE_URL } from '@/lib/constants'
+import { Container } from '@/components/container'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -53,6 +54,13 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
+// Display face for the hero name only - body copy stays Geist.
+const displayFont = Poppins({
+  variable: '--font-display',
+  subsets: ['latin'],
+  weight: '700',
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -61,7 +69,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geist.variable} ${geistMono.variable} font-sans tracking-tight antialiased`}
+        className={`${geist.variable} ${geistMono.variable} ${displayFont.variable} font-sans tracking-tight antialiased`}
       >
         <ThemeProvider
           enableSystem={true}
@@ -70,10 +78,12 @@ export default function RootLayout({
           defaultTheme="dark"
         >
           <div className="flex min-h-screen w-full flex-col">
-            <div className="relative mx-auto w-full max-w-screen-sm flex-1 px-4 pt-16">
-              {children}
+            {/* No width cap here - pages own their own Container so the hero
+                can run full-bleed. */}
+            <div className="relative w-full flex-1">{children}</div>
+            <Container>
               <Footer />
-            </div>
+            </Container>
           </div>
         </ThemeProvider>
       </body>
