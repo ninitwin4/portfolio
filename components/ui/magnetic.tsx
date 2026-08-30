@@ -61,7 +61,8 @@ export function Magnetic({
     return () => {
       document.removeEventListener('mousemove', calculateDistance)
     }
-  }, [ref, isHovered, intensity, range])
+    // x and y are motion values, stable across renders.
+  }, [ref, isHovered, intensity, range, x, y])
 
   useEffect(() => {
     if (actionArea === 'parent' && ref.current?.parentElement) {

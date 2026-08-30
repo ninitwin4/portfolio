@@ -5,15 +5,28 @@ import {
   Children,
   cloneElement,
   ReactElement,
+  ReactNode,
   useEffect,
   useState,
   useId,
 } from 'react'
 
+// The props this component reads off each child, plus the ones it injects back
+// in via cloneElement.
+type AnimatedBackgroundChildProps = {
+  'data-id': string
+  className?: string
+  children?: ReactNode
+  'data-checked'?: string
+  onClick?: () => void
+  onMouseEnter?: () => void
+  onMouseLeave?: () => void
+}
+
+type AnimatedBackgroundChild = ReactElement<AnimatedBackgroundChildProps>
+
 export type AnimatedBackgroundProps = {
-  children:
-    | ReactElement<{ 'data-id': string }>[]
-    | ReactElement<{ 'data-id': string }>
+  children: AnimatedBackgroundChild[] | AnimatedBackgroundChild
   defaultValue?: string
   onValueChange?: (newActiveId: string | null) => void
   className?: string
@@ -46,7 +59,7 @@ export function AnimatedBackground({
     }
   }, [defaultValue])
 
-  return Children.map(children, (child: any, index) => {
+  return Children.map(children, (child: AnimatedBackgroundChild, index) => {
     const id = child.props['data-id']
 
     const interactionProps = enableHover
