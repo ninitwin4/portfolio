@@ -132,6 +132,7 @@ export const PROJECTS: Project[] = [
       'pytest',
     ],
     links: {
+      live: 'https://ninitwin4.github.io/matching-engine/',
       demo: 'https://www.youtube.com/watch?v=FQaMMsk5KHk',
       github: 'https://github.com/ninitwin4/matching-engine',
     },
