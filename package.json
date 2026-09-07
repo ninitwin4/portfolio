@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "upload-resume": "node scripts/upload-resume.mjs"
+    "upload-resume": "node scripts/upload-resume.mjs",
+    "chunk": "node scripts/chunk-corpus.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.1",
