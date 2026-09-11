@@ -124,6 +124,23 @@ export default async function ProjectPage({ params }: PageProps) {
             ))}
           </div>
         )}
+
+        {project.archive && (
+          <div className="border-l-2 border-border pl-4 text-sm">
+            <p className="font-medium text-foreground">
+              {project.archive.status} · DOI{' '}
+              <a
+                href={`https://doi.org/${project.archive.doi}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline decoration-border underline-offset-4 transition-colors hover:text-accent"
+              >
+                {project.archive.doi}
+              </a>
+            </p>
+            <p className="text-muted">{project.archive.note}</p>
+          </div>
+        )}
       </header>
 
       <div className="overflow-hidden rounded-2xl border border-border bg-surface">
