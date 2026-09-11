@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "upload-resume": "node scripts/upload-resume.mjs",
-    "chunk": "node scripts/chunk-corpus.mjs"
+    "chunk": "node scripts/chunk-corpus.mjs",
+    "corpus": "node scripts/embed-corpus.mjs",
+    "eval": "node scripts/eval-retrieval.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.1",
