@@ -54,3 +54,16 @@ Built with Python, FastAPI, the Anthropic Claude API, React, Tailwind, Vite, and
 Live site: https://ninitwin4.github.io/matching-engine/
 Demo video: https://www.youtube.com/watch?v=FQaMMsk5KHk
 Source: https://github.com/ninitwin4/matching-engine
+The source is archived on Zenodo as a citable software record: https://doi.org/10.5281/zenodo.22699739 - see Publication and Citation below.
+
+## Publication and Citation
+
+The matching engine is archived on Zenodo as a citable software record: "MatchingEngine: Domain-Agnostic Compatibility Scoring with Bounded LLM Adjustment", by Ni Ni Tin Win, version 1.1.0, published 10 September 2026, MIT licensed.
+
+Cite it as: Tin Win, N. (2026). MatchingEngine: Domain-Agnostic Compatibility Scoring with Bounded LLM Adjustment (1.1.0). Zenodo. https://doi.org/10.5281/zenodo.22699739
+
+There are two DOIs and the difference matters. 10.5281/zenodo.22699739 is the all-versions DOI: it always resolves to the most recent release, so it is the one to cite for the project as a whole. 10.5281/zenodo.22699927 is the DOI for version 1.1.0 specifically, and it will always point at that exact snapshot.
+
+I archived it because a portfolio link is not evidence. A repository can be force-pushed, renamed, or made private, and the version someone actually read is then gone. A DOI points at a frozen deposit of a specific version, so a reviewer six months from now sees exactly the code I am describing here.
+
+To be exact about what this is: Zenodo mints DOIs for software and datasets, and no peer review is involved. I have not published a conference or journal paper. What exists is a permanent, versioned, citable archive of a working system - which is the honest meaning of "published" here, and the only one worth claiming.

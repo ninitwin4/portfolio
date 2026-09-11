@@ -26,6 +26,8 @@ One document should answer each. Scored as recall@k: did that source appear?
 | Why not just let the model score the match directly? | matching-engine |
 | How does the matching engine handle a new industry? | matching-engine |
 | What did Ni Ni do about security on the matching engine? | matching-engine |
+| Has Ni Ni published anything? | matching-engine |
+| Is there a citable version of the matching engine? | matching-engine |
 | How many users did Chat Chin reach? | chat-chin |
 | What problem was Chat Chin solving? | chat-chin |
 | Has Ni Ni founded a company? | chat-chin |
