@@ -30,6 +30,17 @@ export type ProjectSection = {
   figures?: Media[]
 }
 
+// A citable deposit of the project's code - a DOI-backed software record.
+// Optional on every kind; omit it and the case-study page renders nothing.
+type ProjectArchive = {
+  // Leading word of the block, e.g. 'Archived'.
+  status: string
+  // Bare DOI. The page links it through doi.org.
+  doi: string
+  // One line under it: what the record is, and how it is licensed.
+  note: string
+}
+
 // Shared by every project shape. These are the only fields the homepage card
 // reads, so a new shape never means touching the card.
 type ProjectBase = {
@@ -38,6 +49,7 @@ type ProjectBase = {
   tagline: string
   tags: string[]
   year: string
+  archive?: ProjectArchive
   thumbnail: Media
   // Falls back to the thumbnail when omitted.
   hero?: Media
@@ -135,6 +147,11 @@ export const PROJECTS: Project[] = [
       live: 'https://ninitwin4.github.io/matching-engine/',
       demo: 'https://www.youtube.com/watch?v=FQaMMsk5KHk',
       github: 'https://github.com/ninitwin4/matching-engine',
+    },
+    archive: {
+      status: 'Archived',
+      doi: '10.5281/zenodo.22699739',
+      note: 'Citable software record on Zenodo · v1.1.0 · MIT licensed',
     },
     thumbnail: {
       type: 'image',
