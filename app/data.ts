@@ -67,7 +67,7 @@ type EngineeringProject = ProjectBase & {
 type FounderProject = ProjectBase & {
   kind: 'founder'
   role: string
-  links: { website?: string }
+  links: { website?: string; facebook?: string }
 }
 
 type DesignProject = ProjectBase & {
@@ -279,7 +279,10 @@ export const PROJECTS: Project[] = [
     tags: ['Founder', 'Product 0→1', 'Mobile', '2,000+ users'],
     year: '2019',
     role: 'Co-founder - product and design, end to end',
-    links: { website: 'https://chat-chin.com' },
+    links: {
+      website: 'https://chat-chin.com',
+      facebook: 'https://www.facebook.com/ChatChinn',
+    },
     thumbnail: {
       type: 'image',
       src: '/projects/chat-chin/cover.jpg',
@@ -364,6 +367,10 @@ export function getProjectLinks(project: Project): HeroLink[] {
         project.links.website && {
           label: 'Visit site',
           href: project.links.website,
+        },
+        project.links.facebook && {
+          label: 'Facebook',
+          href: project.links.facebook,
         },
       ])
     case 'design':
