@@ -212,3 +212,66 @@ of whatever absorbed them; and a short trailing section folded backwards
 unconditionally, pushing `about#background` to 406 words and forcing a split
 that no longer aligned to any heading. `about.md` went from three chunks
 sharing one id to two chunks named after their own sections.
+
+**See also 010** - the first time a section's own size had to be authored to
+keep a chunk boundary where the label needed it.
+
+---
+
+## 010 - The Zenodo record enters the corpus as its own chunk
+
+**Decision.** The matching engine's Zenodo deposit is described in three
+places, deliberately: a metadata block on the case-study page (`archive` in
+`app/data.ts`), a `## Publication and Citation` section in
+`content/matching-engine.md`, and one sentence in `about.md`. The corpus
+sections state outright that Zenodo mints DOIs for software with no peer
+review, and that there is no conference or journal paper. The section is
+sized and positioned so it forms its own chunk rather than merging into a
+neighbour.
+
+**Alternatives.** Put the DOI on the page only and leave it out of the
+corpus - the site shows it, so why embed it. Or put it in `about.md` alone,
+since "has she published anything?" is a question about a person, not about
+a project.
+
+**Why.** The page and the corpus answer different questions. A visitor
+reading the case study sees the badge; a visitor who types "has she
+published anything?" never reaches that page, and a corpus that omits the
+record makes the bot say no. Both entry points are real, so both get the
+fact.
+
+Splitting it across two documents is what the retrieval scores argued for.
+The person-level phrasing lands on `about#what-she-works-on-now` (0.593)
+and the artifact-level phrasing on `matching-engine#publication-and-citation`
+(0.634 for "how do I cite the matching engine?"). Neither document wins both
+framings, and `about.md` outranks everything on questions shaped like "has
+she ever...", so a DOI living only in the project file would be retrievable
+by the wrong half of the questions people actually ask.
+
+The honesty framing is not throat-clearing. "Published" and "DOI" next to
+each other are enough for a model to produce "her published research", which
+would be a fabricated credential on a portfolio - the worst failure this bot
+has available to it. Saying what the record is *not*, in the retrieved text,
+is cheaper and more reliable than hoping the system prompt covers it.
+
+**Accepted cost.** The DOI now appears in three files and can drift; the
+version number in the page badge (`v1.1.0`) will go stale on the next Zenodo
+release, and nothing checks it. And 004's merge rule is now load-bearing in
+a way it was not designed to be - see the note below.
+
+**Note - section size is now a citation-label concern.** `mergeSmall` absorbs
+any section under `MIN_WORDS` into the one after it, so a chunk's label is
+decided by whichever neighbours happen to be short. Security and Scope (118
+words) plus Stack and Links (21) left an open group that swallowed
+Publication and Citation, producing a single chunk labelled "Security and
+Scope" that answered DOI questions - exactly the mislabelling 009 exists to
+prevent. The fix was content, not code: the archive link added to Stack and
+Links closes that group at 157 words, so the publication section stands
+alone.
+
+That is a fragile repair. Trimming a sentence from Security and Scope
+re-opens the group and silently re-buries the chunk, with no error and no
+failing eval - recall still passes, because the right *document* is
+retrieved either way. Only the citation shown to the visitor is wrong. If
+this recurs, the real fix is to let a section opt out of merging rather than
+to keep authoring around the thresholds.
