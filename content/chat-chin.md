@@ -37,3 +37,4 @@ We took Chat Chin from concept to a live product with 2,000+ users. I owned prod
 Co-founder, product and design, end to end.
 
 Website: https://chat-chin.com
+Social: Chat Chin's public social account is its Facebook page, https://www.facebook.com/ChatChinn - in Myanmar that page was where customers actually found and messaged the company.

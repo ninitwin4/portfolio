@@ -31,6 +31,7 @@ One document should answer each. Scored as recall@k: did that source appear?
 | How many users did Chat Chin reach? | chat-chin |
 | What problem was Chat Chin solving? | chat-chin |
 | Has Ni Ni founded a company? | chat-chin |
+| Does Chat Chin have a social page or account? | chat-chin |
 | Has Ni Ni managed people? | resume |
 | What is Ni Ni's design experience? | cstu-veteran |
 | What is Ni Ni working on now? | about |
