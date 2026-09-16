@@ -34,10 +34,27 @@ export type RetrievedChunk = {
   score: number
 }
 
-// k=5 rather than 3, because a multi-source question needs every one of its
-// documents to place - see DECISIONS.md 008. Three documents competing for a
-// top-3 leaves no room for a near miss.
-export const DEFAULT_K = 5
+// k=8 rather than 5. 008 set the floor at 5 by reasoning about how many
+// documents a multi-source answer needs; measuring showed 5 was not enough
+// once two generalist documents started taking slots. See 012.
+export const DEFAULT_K = 8
+
+// At most this many chunks from any one document may hold the window.
+//
+// `about.md` and `chat-assistant.md` are hub documents - a biography and a
+// description of this feature sit semantically near almost every question, so
+// they placed in the top 5 for 83% and 77% of the golden set and crowded out
+// the document that actually held the answer. "Has Ni Ni shipped anything with
+// a real database?" filled five slots with two documents and never reached
+// RoomFit.
+//
+// This is a cheap stand-in for MMR (maximal marginal relevance), which scores
+// a candidate on relevance minus similarity to what is already picked. Capping
+// per document gets most of that benefit for a fraction of the code, because
+// here the redundancy that matters runs along document lines.
+//
+// Pass Infinity to turn it off.
+export const DEFAULT_MAX_PER_SOURCE = 2
 
 export function cosineSimilarity(a: number[], b: number[]): number {
   if (a.length !== b.length) {
@@ -70,12 +87,29 @@ export function rank(
   queryEmbedding: number[],
   chunks: Chunk[],
   k: number = DEFAULT_K,
+  maxPerSource: number = DEFAULT_MAX_PER_SOURCE,
 ): RetrievedChunk[] {
-  return chunks
+  const scored = chunks
     .map((chunk) => ({
       chunk,
       score: cosineSimilarity(queryEmbedding, chunk.embedding),
     }))
     .sort((a, b) => b.score - a.score)
-    .slice(0, k)
+
+  // Order-preserving, so capping and then slicing to k gives the same window as
+  // capping while slicing - which is what lets the eval harness rank once and
+  // score several k from one pass.
+  const used = new Map<string, number>()
+  const kept: RetrievedChunk[] = []
+
+  for (const hit of scored) {
+    const taken = used.get(hit.chunk.source) ?? 0
+    if (taken >= maxPerSource) continue
+
+    used.set(hit.chunk.source, taken + 1)
+    kept.push(hit)
+    if (kept.length === k) break
+  }
+
+  return kept
 }

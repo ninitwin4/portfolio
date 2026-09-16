@@ -172,6 +172,10 @@ question. An answer needing three documents cannot be assembled from a top-3
 retrieval unless all three place first, competing against the rest of the
 corpus. It is the main argument for k=5 over k=3, and the reason a re-ranking
 step is the most likely future refinement.
+
+**Amended by 012** - k is 8, and the binding constraint turned out to be which
+documents take the slots, not how many slots there are.
+
 ---
 
 ## 009 - Citation labels name the first heading, and chunk ids are unique
@@ -313,3 +317,40 @@ and worth re-checking if the number grows.
 **Revisit when.** The corpus stops living in this repository, or `corpus.json`
 passes a few megabytes - at which point the index wants to be fetched and
 cached rather than bundled.
+
+---
+
+## 012 - A per-document cap on the retrieval window
+
+**Decision.** At most 2 chunks from any one document may hold the top-k, and k
+moves from 5 to 8. Both are defaults in `retrieve.ts`, and the eval harness can
+sweep either with `--k` and `--cap`.
+
+**Alternatives.** A cap of 1, which scores 100% - every document gets at most
+one chunk. True MMR (maximal marginal relevance), scoring each candidate on
+relevance minus similarity to what is already selected. Or leave retrieval
+alone and fix the corpus: split `about.md`, thicken the thin documents.
+
+**Why.** 008 set k=5 by reasoning about how many documents an aggregation
+answer needs. Measuring found a different cause. `about.md` and
+`chat-assistant.md` are hub documents - a biography and a self-description sit
+semantically near almost every question - and they took top-5 slots for 83% and
+77% of the golden set. "Has Ni Ni shipped anything with a real database?" spent
+five slots on two documents and never reached RoomFit. The problem was not too
+few slots; it was slots going to the same places. Capping recall at k=8 from
+88% to 92%, and multi-source questions from 3/5 to 4/5.
+
+Cap 1 scores higher, and we did not take it. Recall@k measures whether the
+right *document* appeared, not whether enough material arrived to answer well,
+so cap 1 optimises the visible number while starving any question whose answer
+genuinely spans two chunks of one document. Cap 2 keeps that headroom.
+
+**Accepted cost.** Eight chunks in the prompt rather than five, on a corpus of
+sixteen - half of it reaches the model on every question, which is closer to
+context stuffing than 001 intended. The cap is also blunt: a question genuinely
+answered by three chunks of one document now gets two.
+
+**Revisit when.** The corpus roughly doubles, at which point the hub documents
+stop dominating on their own and true MMR starts being worth the code.
+
+**Amends 008** - which named k=5 as the floor.

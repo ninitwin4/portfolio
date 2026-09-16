@@ -1,7 +1,8 @@
 // Measure retrieval recall against evals/golden-questions.md.
 //
-// Run: npm run eval  (add -- --k 3 to score a single k, -- --show to print the
-// retrieved sources for every question.)
+// Run: npm run eval  (add -- --k 3 to score a single k, -- --cap 1 to change
+// how many chunks one document may take, -- --cap off to remove the limit, and
+// -- --show to print the retrieved sources for every question.)
 //
 // This is the number decision 006 exists for. Without it, tuning chunk size or
 // k is guesswork - and nearly every RAG failure is a retrieval failure wearing
@@ -11,7 +12,7 @@ import { readFile } from 'node:fs/promises'
 
 import { loadEnvLocal } from './lib/env.mjs'
 import { embedTexts } from '../lib/rag/embed.ts'
-import { rank } from '../lib/rag/retrieve.ts'
+import { DEFAULT_K, DEFAULT_MAX_PER_SOURCE, rank } from '../lib/rag/retrieve.ts'
 
 const GOLDEN = 'evals/golden-questions.md'
 const CORPUS = 'lib/rag/corpus.json'
@@ -86,15 +87,32 @@ async function main() {
   const kValues =
     kFlag === -1 ? K_VALUES : [Number(args[kFlag + 1])].filter(Boolean)
 
+  // Retrieval has two knobs now, so the harness has to be able to move both -
+  // 012 was chosen by sweeping this one, and the next tuning pass will need the
+  // same freedom without editing the script.
+  const capFlag = args.indexOf('--cap')
+  const capArg = capFlag === -1 ? null : args[capFlag + 1]
+  const maxPerSource =
+    capArg === null
+      ? DEFAULT_MAX_PER_SOURCE
+      : capArg === 'off'
+        ? Number.POSITIVE_INFINITY
+        : Number(capArg)
+
   const index = JSON.parse(await readFile(CORPUS, 'utf8'))
   const golden = parseGolden(await readFile(GOLDEN, 'utf8'))
 
   const scored = golden.filter((row) => row.kind !== 'none')
   const outOfScope = golden.filter((row) => row.kind === 'none')
 
+  const capLabel = Number.isFinite(maxPerSource)
+    ? `max ${maxPerSource} chunk(s) per document`
+    : 'no per-document limit'
+
   console.log(
     `${index.chunks.length} chunks · ${scored.length} scored questions · ` +
-      `${outOfScope.length} out-of-scope\n`,
+      `${outOfScope.length} out-of-scope\n` +
+      `${capLabel} · production runs k=${DEFAULT_K}\n`,
   )
 
   const { embeddings } = await embedTexts(golden.map((row) => row.question))
@@ -102,7 +120,7 @@ async function main() {
 
   const results = golden.map((row, i) => ({
     ...row,
-    retrieved: rank(embeddings[i], index.chunks, maxK),
+    retrieved: rank(embeddings[i], index.chunks, maxK, maxPerSource),
   }))
 
   for (const k of kValues) {

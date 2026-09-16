@@ -93,9 +93,11 @@ and the answer is quietly incomplete - and *incomplete is worse than wrong
 here*, because the bot will sound confident while underselling the work.
 
 So this question sets a practical floor on **k**, the number of chunks
-retrieved. It is the main reason to keep k at 5 rather than 3, and the main
-argument for a future refinement: retrieving more chunks than needed and then
-re-ranking, or letting the model ask for a second retrieval pass.
+retrieved. It was the original argument for k=5 over k=3 - but measuring showed
+the floor was not the binding constraint. Two hub documents were taking the
+slots, so k=8 with a per-document cap of 2 is what actually moved multi-source
+recall (DECISIONS.md 012). Re-ranking the retrieved set, or letting the model
+ask for a second pass, remains the next refinement.
 
 Skills questions are also the most likely thing a recruiter types first, which
 makes this the highest-stakes row in the file.
