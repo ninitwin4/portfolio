@@ -275,3 +275,41 @@ failing eval - recall still passes, because the right *document* is
 retrieved either way. Only the citation shown to the visitor is wrong. If
 this recurs, the real fix is to let a section opt out of merging rather than
 to keep authoring around the thresholds.
+
+---
+
+## 011 - The index is imported, not read from disk
+
+**Decision.** `lib/rag/search.ts` is the only thing that knows where the index
+lives. It pulls `corpus.json` in with a static `import`, checks it against the
+embedding model on first use, and exposes one function: a question and a `k`
+in, ranked chunks out. Callers never see `corpus.json`, `cosineSimilarity`, or
+OpenAI.
+
+**Alternatives.** `fs.readFile` at request time, which keeps the 256KB out of
+the bundle and lets the index be swapped without a deploy. Or no seam at all -
+let the chat route import `retrieve.ts` and load the file itself, which is
+fewer lines today.
+
+**Why.** A static import is resolved by the bundler, so a missing, truncated,
+or wrong-model index fails the build rather than the first visitor's question.
+Reading from disk moves that failure to runtime and adds a dependency on file
+tracing putting the file in the lambda - a thing that works until someone
+changes the output mode. Module scope also caches for free: 256KB is parsed
+once per instance at cold start, not per request. Verified against a real
+build, where the index lands in the function bundle and the route compiles at
+145 B of its own code.
+
+The seam matters more than the loading strategy. 002 promised that swapping in
+pgvector would be a rewrite of one file; that only holds if callers never learn
+what the storage is. One function is what keeps the promise honest.
+
+**Accepted cost.** The index is deploy-time state. Re-indexing the corpus means
+a push, not a job - correct while the corpus is hand-written markdown in the
+same repo, wrong the moment content moves to a CMS. And every function that
+imports `search` carries 256KB it may not use, which is fine at one chat route
+and worth re-checking if the number grows.
+
+**Revisit when.** The corpus stops living in this repository, or `corpus.json`
+passes a few megabytes - at which point the index wants to be fetched and
+cached rather than bundled.
