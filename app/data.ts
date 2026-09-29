@@ -109,11 +109,18 @@ export const HERO = {
   ],
 }
 
+// Set to true to resume accepting resume requests. While false: the hero
+// button is hidden, /resume shows a paused notice instead of the form, and
+// the email API rejects `type: 'resume'` so saved links can't still submit.
+export const RESUME_ENABLED = false
+
 export const HERO_LINKS: HeroLink[] = [
   { label: 'GitHub', href: 'https://github.com/ninitwin4' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ni-ni-tin-win/' },
   { label: 'YouTube', href: 'https://www.youtube.com/@journi_ni/shorts' },
-  { label: 'Resume', href: '/resume' },
+  ...(RESUME_ENABLED
+    ? [{ label: 'Resume', href: '/resume' } satisfies HeroLink]
+    : []),
 ]
 
 export const ABOUT = {
