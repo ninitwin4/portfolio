@@ -215,6 +215,70 @@ export const PROJECTS: Project[] = [
   },
   {
     kind: 'design',
+    slug: 'emptorix',
+    title: 'Emptorix AI',
+    tagline:
+      'Early-stage AI platform bringing business intelligence to customer success workflows.',
+    tags: [
+      'Product Design',
+      'Front-End',
+      'Data Visualization',
+      'Responsive Web',
+    ],
+    year: '2024',
+    role: 'Product Designer & Front-End Developer',
+    links: {
+      figma:
+        'https://www.figma.com/proto/NbRSmCHvJQPwLg6DjqA1j3/Home-Page_Emptorix?node-id=3-2&viewport=919%2C585%2C0.5&t=XWIZ6pURWyHnIwiR-1&scaling=contain&content-scaling=fixed&page-id=0%3A1',
+    },
+    thumbnail: {
+      type: 'image',
+      src: '/projects/emptorix/macbook.jpg',
+      alt: 'The Emptorix home page on a MacBook Pro, with a polygon-mesh face beside the headline "What Truly Matters to Customers?"',
+      width: 1600,
+      height: 1000,
+    },
+    sections: [
+      {
+        title: 'The Problem',
+        body: [
+          'Emptorix was an early-stage startup with research to share and no website to share it on. Everything lived in PowerPoint decks and spreadsheets: index scores, percentage lifts, industry rankings, and long paragraphs explaining what they meant.',
+          'Slides like that work in a pitch meeting, where someone walks you through them. A website has no presenter. The numbers were the whole argument, and in slide form a visitor would scroll right past them.',
+        ],
+      },
+      {
+        title: 'What I Did',
+        body: [
+          'I built the site from a blank canvas: the visual design in Figma and the front-end build, delivered in three-week milestones.',
+          'Most of the work was translation. I rebuilt each slide as something a visitor could read at a glance. A ten-segment wheel maps the dimensions behind the index, quadrant maps show where brands sit against each other, ranking tables replace pages of scores, and certificates mark the category winners.',
+          'It took more than one pass. The first version leaned on bright color and large stat callouts; the final one moved to a darker, more editorial layout with serif headlines.',
+          'Before handoff, I tested the UI across major browsers and device breakpoints and fixed the layout inconsistencies that came up, leaving a clean, release-ready front end on desktop and mobile.',
+        ],
+        figures: [
+          {
+            type: 'image',
+            src: '/projects/emptorix/dimensions.jpg',
+            alt: 'A section titled "10 Key Dimensions Reveal a Brand\'s Values" beside a ten-segment wheel around the EmpTorix Social Connection Index.',
+            width: 1600,
+            height: 486,
+            caption:
+              'Ten dimensions behind the index, in a single diagram instead of a slide of text.',
+          },
+          {
+            type: 'image',
+            src: '/projects/emptorix/iterations.jpg',
+            alt: 'A Figma canvas of six desktop frames for the Accelerator Hub pages, progressing from a grey wireframe to high-fidelity layouts, with comment pins on several frames.',
+            width: 1600,
+            height: 1294,
+            caption:
+              'The messy middle: Accelerator Hub pages across six passes, from grey wireframe to high fidelity, with review comments still pinned. Zoom in for detail.',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    kind: 'design',
     slug: 'cstu-veteran',
     title: 'CSTU Veteran Admissions',
     tagline:
