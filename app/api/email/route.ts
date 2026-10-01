@@ -4,6 +4,7 @@ import { get } from '@vercel/blob'
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import type { CreateEmailOptions } from 'resend'
+import { RESUME_ENABLED } from '@/app/data'
 
 export const runtime = 'nodejs'
 
@@ -204,6 +205,23 @@ async function handleResume(
 }
 
 export async function POST(request: NextRequest) {
+  let body: EmailRequest
+
+  try {
+    body = await request.json()
+  } catch {
+    return jsonResponse({ ok: false, message: 'Invalid request body.' }, 400)
+  }
+
+  // Paused features short-circuit before any email config is looked at, so the
+  // answer is the same whether or not Resend happens to be configured.
+  if (body.type === 'resume' && !RESUME_ENABLED) {
+    return jsonResponse(
+      { ok: false, message: 'Resume requests are paused right now.' },
+      403,
+    )
+  }
+
   const env = getEnv()
 
   if (!env) {
@@ -211,14 +229,6 @@ export async function POST(request: NextRequest) {
       { ok: false, message: 'Email is not configured yet.' },
       500,
     )
-  }
-
-  let body: EmailRequest
-
-  try {
-    body = await request.json()
-  } catch {
-    return jsonResponse({ ok: false, message: 'Invalid request body.' }, 400)
   }
 
   const resend = new Resend(env.apiKey)
