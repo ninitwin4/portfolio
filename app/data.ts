@@ -162,10 +162,10 @@ export const PROJECTS: Project[] = [
     },
     thumbnail: {
       type: 'image',
-      src: '/projects/matching-engine/housing.png',
+      src: '/projects/matching-engine/housing-ui.png',
       alt: 'The Matching Engine interface showing a ranked list of roommate matches with explainable scores.',
-      width: 1521,
-      height: 1600,
+      width: 1600,
+      height: 1537,
     },
     sections: [
       {
