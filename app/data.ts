@@ -135,6 +135,82 @@ export const ABOUT = {
 export const PROJECTS: Project[] = [
   {
     kind: 'engineering',
+    slug: 'kiki-voice-agent',
+    title: 'Kiki Voice Agent',
+    tagline:
+      "A voice agent that sits in on a conversation between friends planning a trip, stays quiet until she's useful, and books the whole thing.",
+    tags: ['Voice AI', 'Full-Stack', 'Python', 'React', 'Hackathon'],
+    year: '2026',
+    stack: [
+      'Python',
+      'FastAPI',
+      'React 18',
+      'TypeScript',
+      'Vite',
+      'Vocal Bridge (gpt-realtime-2)',
+      'Sabre APIs',
+      'PayPal Orders v2',
+      'Render',
+      'pytest',
+    ],
+    links: {
+      demo: 'https://www.youtube.com/watch?v=K8ZU7JA9WYs',
+      github: 'https://github.com/ninitwin4/kiki-voice-agent',
+    },
+    thumbnail: {
+      type: 'image',
+      src: '/projects/kiki/poster.jpg',
+      alt: 'Kiki speaking mid-update as she moves a Maui trip to August: flight, hotel, minivan, and two activity cards re-dated, a live transcript, and a running total of $11,460 against a $12,000 budget.',
+      width: 1440,
+      height: 1062,
+    },
+    hero: {
+      type: 'video',
+      src: '/projects/kiki/demo-loop.mp4',
+      poster: '/projects/kiki/poster.jpg',
+      alt: 'Kiki demo: two friends plan a Maui trip, Kiki books flights, hotel, minivan and activities, then moves the whole trip from rainy November to dry August in one step.',
+      width: 1440,
+      height: 1062,
+      caption:
+        'A walkthrough of the real interface, driven by its scripted demo mode - no live voice or API calls. The narrated demo is on YouTube.',
+    },
+    sections: [
+      {
+        title: 'The Idea',
+        body: [
+          'Planning a trip with friends happens in conversation: who is coming, when, and what everyone can spend. Then someone has to go away and turn that conversation into bookings - and redo them when the plan changes.',
+          'Kiki sits in on that conversation. She listens to two people at once and only speaks when she is addressed by name or finds something that matters. When the plan is settled, she books it.',
+          'Built at the DeepLearning.AI Voice AI Hackathon in July 2026, where I was team lead of a team of two. I built Kiki full-stack, end to end: a real-time voice agent, a FastAPI backend, and a React interface.',
+        ],
+      },
+      {
+        title: 'What the Demo Shows',
+        body: [
+          'Ni Ni (a party of two) and RC (a party of three, including a five-year-old) plan Maui for the first week of November. Kiki books flights, a hotel, a minivan, and two activities.',
+          "Then she raises that early November is Maui's rainy season - and RC won't travel in the rain. One call moves the entire trip to dry August: all four vendors re-date and re-price together, and the total goes from $9,170 to $11,460, still under the $12,000 budget.",
+          "She also keeps track of what people asked for along the way: RC's group wants local and vegetarian food, and Ni Ni asked to be reminded to pack deodorant and a hair mask.",
+        ],
+      },
+      {
+        title: 'Key Decisions',
+        body: [
+          'One call re-books everything. A single /trip/rebook endpoint re-dates and re-prices flights, hotel, transport, and activities together, and anything already booked stays booked. Changing the dates of a trip should be one decision, not four.',
+          'One source of truth. The voice agent only sends thin signals - "the flight card changed" - and the UI then re-reads the whole trip from one endpoint. The numbers on screen can never drift from the backend, because the screen never keeps its own copy.',
+          'Degradation first. Every card renders independently, so one vendor failing degrades only its own card while the rest of the trip carries on. The demo deliberately shows the car rental failing and recovering.',
+        ],
+      },
+      {
+        title: 'Real and Mock Integrations',
+        body: [
+          'Kiki was integrated and verified against live Sabre APIs - real flight fares, travel seasonality, and Maui hotel search - and ran real PayPal sandbox orders. Voice tokens were minted server-side, so the API key never reached the browser.',
+          "Curated mock bookings kept the demo safe, and expired credentials degrade silently instead of breaking the flow. Raw captured responses in the repo's evidence folder show the integrations were live.",
+          'There is no hosted live demo: live voice needs a paid plan, and the free-tier backend cold-starts slowly. The repository and the narrated video are the reliable way to see it.',
+        ],
+      },
+    ],
+  },
+  {
+    kind: 'engineering',
     slug: 'matching-engine',
     title: 'Matching Engine',
     tagline:

@@ -52,12 +52,13 @@ export async function generateMetadata({
   }
 }
 
-function Figure({ media }: { media: Media }) {
+function Figure({ media, priority }: { media: Media; priority?: boolean }) {
   return (
     <figure className="overflow-hidden rounded-2xl border border-border bg-surface">
       <ProjectMedia
         media={media}
         sizes={MEDIA_SIZES}
+        priority={priority}
         className="h-auto w-full"
       />
       {media.caption && (
@@ -143,14 +144,7 @@ export default async function ProjectPage({ params }: PageProps) {
         )}
       </header>
 
-      <div className="overflow-hidden rounded-2xl border border-border bg-surface">
-        <ProjectMedia
-          media={hero}
-          sizes={MEDIA_SIZES}
-          priority
-          className="h-auto w-full"
-        />
-      </div>
+      <Figure media={hero} priority />
 
       <dl className="grid gap-4 border-y border-border py-5 sm:grid-cols-2">
         {meta.map((row) => (
