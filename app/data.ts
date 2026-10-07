@@ -67,7 +67,7 @@ type EngineeringProject = ProjectBase & {
 type FounderProject = ProjectBase & {
   kind: 'founder'
   role: string
-  links: { website?: string; facebook?: string }
+  links: { website?: string; facebook?: string; github?: string }
 }
 
 type DesignProject = ProjectBase & {
@@ -133,6 +133,87 @@ export const ABOUT = {
 }
 
 export const PROJECTS: Project[] = [
+  {
+    kind: 'founder',
+    slug: 'roomfit',
+    title: 'RoomFit',
+    tagline:
+      'A matching platform that ranks San Francisco rooms by how you actually live, with the reason for every score.',
+    tags: [
+      'Founder',
+      'Full-Stack',
+      'Matching Platform',
+      'Explainable Ranking',
+      'Mobile-First',
+    ],
+    year: '2026',
+    role: 'Founder - product and full-stack build',
+    links: {
+      website: 'https://joinroomfit.com',
+      github: 'https://github.com/ninitwin4/roomfit',
+    },
+    thumbnail: {
+      type: 'image',
+      src: '/projects/roomfit/landing-macbook.jpg',
+      alt: 'The RoomFit landing page on a MacBook Pro: "Find a room that fits." above a line drawing of the San Francisco skyline.',
+      width: 1600,
+      height: 1000,
+    },
+    sections: [
+      {
+        title: 'The Problem',
+        body: [
+          'When I moved to San Francisco, I had no network and no rental history. I tried Craigslist and nearly got scammed. Facebook groups were the best option left, and every listing in them was a stranger I had to guess about.',
+          'Later, as the one listing a room, it took four to five weeks to find someone - in a city where an empty room means paying two rents.',
+          "Every listing tells you the rent and the neighborhood. Almost none tell you what actually decides whether you'll be happy there: whether you'd live well with the people already in the house. And the sites that claim to match hand back an opaque percentage, with no way to tell whether 85% means the rent fits or the lifestyle does.",
+        ],
+      },
+      {
+        title: "What I'm Building",
+        body: [
+          'RoomFit ranks rooms by how you actually live. You set your budget, area, tidiness, how social you want the home to be, and your sleep schedule. Three hard filters drop the dealbreakers - too far over budget, pets, smoking - and the app tells you how many it ruled out and why, rather than silently shrinking the list.',
+          'Every remaining room is scored across five factors, 20 points each, and every score opens into a receipt: where each point came from, with a plain-language reason. When a room ranks second instead of first, you should see why in one glance.',
+          "It works for both sides. Hosts post rooms with photos; seekers save rooms and message the person rather than a listing, and anyone who messages a room has already been scored against it. It's mobile-first, built to be used on a phone while you're actually flat-hunting.",
+        ],
+        figures: [
+          {
+            type: 'image',
+            src: '/projects/roomfit/landing-receipt.jpg',
+            alt: 'The landing page section "Every match comes with a receipt." beside an example preferences card with budget, area, tidiness, social level, and sleep hours.',
+            width: 1600,
+            height: 954,
+            caption:
+              'The landing page makes one promise: five factors, each scored and explained.',
+          },
+          {
+            type: 'image',
+            src: '/projects/roomfit/app-iphone.jpg',
+            alt: 'The RoomFit app on an iPhone: 95 rooms fit with 20 ruled out, a Noe Valley room scoring 88, and the start of its per-factor breakdown.',
+            width: 1230,
+            height: 1600,
+            caption:
+              'The app keeps it: 20 rooms ruled out and counted, and the receipt behind an 88.',
+          },
+        ],
+      },
+      {
+        title: 'Key Decisions',
+        body: [
+          'No AI in the ranking. The scoring is deliberately boring - bounded, capped, and rule-based - so the same input always produces the same result, and every score can be explained. If language models come in, it will be to write explanations on top of the score, never inside it.',
+          'The backend never touches the database. The stack is React and Vite, a FastAPI ranking service, and Supabase. The frontend holds the Supabase session and posts preferences and rooms to a stateless /rank endpoint, which scores and explains but holds no credentials and stores no user data. Row Level Security does the protecting: everyone can read listings, but only ever write their own.',
+          "A dependency list that hasn't grown since week one: three packages on the frontend, three on the backend. Photo resizing, the swipeable gallery, avatars, and messaging are all built on stock browser APIs. Fewer moving parts to break, and nothing to keep patched.",
+          "It's the same conviction as my Matching Engine, arrived at from the other direction. There, a model is allowed in but hard-capped; here, it's kept out of the ranking entirely. The two share concepts, not code.",
+        ],
+      },
+      {
+        title: 'Where It Is Now',
+        body: [
+          "RoomFit is in beta in San Francisco, opening neighborhood by neighborhood, with a waitlist deciding which areas go first. I'm building it with co-founder Vincent L.",
+          'Three real testers have used it so far, and the first round of their feedback has shipped.',
+        ],
+      },
+    ],
+  },
   {
     kind: 'engineering',
     slug: 'kiki-voice-agent',
@@ -518,6 +599,10 @@ export function getProjectLinks(project: Project): HeroLink[] {
         project.links.facebook && {
           label: 'Facebook',
           href: project.links.facebook,
+        },
+        project.links.github && {
+          label: 'GitHub',
+          href: project.links.github,
         },
       ])
     case 'design':
