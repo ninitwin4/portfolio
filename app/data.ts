@@ -104,8 +104,9 @@ export const HERO = {
   // Matches the LinkedIn banner line.
   tagline: 'I turn real-world problems into AI products that work.',
   // Right-hand column of the hero. Mirrors the LinkedIn headline.
+  // "\n" forces a line break (the paragraph uses whitespace-pre-line).
   intro: [
-    'Product engineer and operator turned builder. Builder of MatchingEngine, an open-source AI compatibility engine.',
+    'Product engineer and operator turned builder.\nBuilder of MatchingEngine, an open-source AI compatibility engine.',
     'AI systems, product design, and data operations.',
   ],
 }

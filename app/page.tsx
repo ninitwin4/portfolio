@@ -105,7 +105,10 @@ export default function Home() {
             </p>
             <div className="space-y-3">
               {HERO.intro.map((paragraph) => (
-                <p key={paragraph} className="text-sm leading-relaxed text-muted">
+                <p
+                  key={paragraph}
+                  className="text-sm leading-relaxed whitespace-pre-line text-pretty text-muted"
+                >
                   {paragraph}
                 </p>
               ))}
