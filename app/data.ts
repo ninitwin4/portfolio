@@ -99,13 +99,14 @@ type BlogPost = {
 
 export const HERO = {
   name: 'Ni Ni Tin Win',
-  title: 'Building AI systems',
-  tagline:
-    'I care about making AI reliable - data quality, evaluation, and the human layer that makes models trustworthy.',
-  // Right-hand column of the hero. Condensed from the About section - edit freely.
+  // Not shown on the page; used for the browser tab and link previews.
+  title: 'Product Engineer',
+  // Matches the LinkedIn banner line.
+  tagline: 'I turn real-world problems into AI products that work.',
+  // Right-hand column of the hero. Mirrors the LinkedIn headline.
   intro: [
-    'Co-founded a consumer app and scaled it from 0 to 2,000+ users, then led AI data operations at a robotics startup, growing the team from 25 operators to 130 across 10 sites.',
-    'I think like a PM and build like an engineer. Currently deep in evaluation, agent tooling, and the messy parts of shipping AI that works.',
+    'Product engineer and operator turned builder. Builder of MatchingEngine, an open-source AI compatibility engine.',
+    'AI systems, product design, and data operations.',
   ],
 }
 
@@ -125,10 +126,12 @@ export const HERO_LINKS: HeroLink[] = [
 
 export const ABOUT = {
   paragraphs: [
-    'I co-founded a consumer app and scaled it from 0 to 2,000+ users, then joined an AI robotics startup as an operator and was promoted within months to lead the team, helping grow the data operation from 25 operators to 130 across 10 sites.',
-    'I think like a PM and build like an engineer. Recently: a full-stack voice AI agent shipped in a single day – FastAPI backend, 13 endpoints, 9 wired as agent tools across three live third-party APIs – and a matching engine whose tiered pipeline cut LLM calls 86%, validated with a custom eval harness.',
-    'Three threads, one job: turning messy problems into systems that work – a data pipeline, a team, or a product. I do my best work where people run with a whole problem, not just their slice.',
-    "If there's a problem to solve, I find a way.",
+    'I spent years operating and designing systems before realizing I wanted to be the person building them.',
+    "Today I'm an operator turned builder. I combine product thinking, design, and hands-on engineering to turn ambiguous problems into working products.",
+    'I built MatchingEngine, an open-source compatibility engine that bounds what the model can influence and validates its output in code, with an eval harness that catches ungrounded reasoning. Before that, a real-time voice agent wired to three live APIs, built and demoed in a day. Python, FastAPI, React.',
+    "Now I'm building RoomFit, a room-matching platform in San Francisco.",
+    'At an AI robotics startup, I joined with no prior experience in the field and was promoted after seven months. I automated a manual scheduling process, cutting planning from 5 hours to 1.5, and trained operators as the operation scaled from 25 to 130 across 10 sites. That work was the human layer behind AI training data.',
+    "Operations taught me how systems break. Design taught me how to make them legible. Engineering let me ship the fix. If you're building something and think there could be a fit, feel free to reach out.",
   ],
 }
 

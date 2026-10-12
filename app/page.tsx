@@ -24,7 +24,7 @@ import {
 const SECTION_VIEWPORT = { once: true, margin: '-10% 0px' as const }
 
 const heroTitleClass =
-  'hero-display hero-gradient-text mt-4 text-[clamp(2.75rem,9vw,6rem)] font-bold leading-[1.05] tracking-[-0.03em] text-balance'
+  'hero-display hero-gradient-text text-[clamp(2.75rem,9vw,6rem)] font-bold leading-[1.05] tracking-[-0.03em] text-balance'
 
 const sectionHeadingClass =
   'font-mono text-base font-medium uppercase tracking-widest text-accent-violet'
@@ -89,7 +89,6 @@ export default function Home() {
         className="relative flex min-h-svh flex-col justify-center py-24"
       >
         <Container>
-          <p className={sectionHeadingClass}>{HERO.title}</p>
           <TextEffect
             as="h1"
             preset="fade"
