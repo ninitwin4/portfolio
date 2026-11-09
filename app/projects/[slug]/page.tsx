@@ -16,7 +16,9 @@ const MEDIA_SIZES = '(min-width: 640px) 640px, 100vw'
 type PageProps = { params: Promise<{ slug: string }> }
 
 export function generateStaticParams() {
-  return PROJECTS.map((project) => ({ slug: project.slug }))
+  return PROJECTS.filter((project) => project.kind !== 'concept').map(
+    (project) => ({ slug: project.slug }),
+  )
 }
 
 export async function generateMetadata({
@@ -25,7 +27,7 @@ export async function generateMetadata({
   const { slug } = await params
   const project = getProject(slug)
 
-  if (!project) return {}
+  if (!project || project.kind === 'concept') return {}
 
   const image =
     project.thumbnail.type === 'video'
@@ -74,7 +76,8 @@ export default async function ProjectPage({ params }: PageProps) {
   const { slug } = await params
   const project = getProject(slug)
 
-  if (!project) notFound()
+  // Concepts live outside this route (see getProjectHref), so no case study.
+  if (!project || project.kind === 'concept') notFound()
 
   const links = getProjectLinks(project)
   const meta = getProjectMeta(project)

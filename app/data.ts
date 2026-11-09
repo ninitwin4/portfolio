@@ -76,7 +76,19 @@ type DesignProject = ProjectBase & {
   links: { live?: string; figma?: string }
 }
 
-export type Project = EngineeringProject | FounderProject | DesignProject
+// A standalone page outside the case-study route (e.g. a static HTML file in
+// public/). Its card links straight to `href`, and it gets no /projects/<slug>
+// page or sitemap row of its own.
+type ConceptProject = ProjectBase & {
+  kind: 'concept'
+  href: string
+}
+
+export type Project =
+  | EngineeringProject
+  | FounderProject
+  | DesignProject
+  | ConceptProject
 
 type TimelineEntry = {
   id: string
@@ -375,6 +387,24 @@ export const PROJECTS: Project[] = [
     ],
   },
   {
+    kind: 'concept',
+    slug: 'open-roles',
+    title: 'Open Roles — Fit Receipt Concept',
+    tagline:
+      "Work-authorization filters and personal fit receipts for job seekers, built on MatchingEngine's scoring approach.",
+    tags: ['Concept', 'Fit Receipts', 'Explainable Ranking', 'Job Search'],
+    year: '2026',
+    href: '/concepts/open-roles.html',
+    thumbnail: {
+      type: 'image',
+      src: '/projects/open-roles/thumb.jpg',
+      alt: 'The Open Roles concept: an open_roles job board with a "Why this fits you" receipt for a Product Designer role and a filter panel including Work Authorization.',
+      width: 1600,
+      height: 1000,
+    },
+    sections: [],
+  },
+  {
     kind: 'design',
     slug: 'emptorix',
     title: 'Emptorix AI',
@@ -614,16 +644,26 @@ export function getProjectLinks(project: Project): HeroLink[] {
         project.links.live && { label: 'Live site', href: project.links.live },
         project.links.figma && { label: 'Figma', href: project.links.figma },
       ])
+    case 'concept':
+      return []
   }
 }
 
 export function getProjectMeta(project: Project): { label: string; value: string }[] {
-  return [
-    { label: 'Year', value: project.year },
-    project.kind === 'engineering'
-      ? { label: 'Stack', value: project.stack.join(' · ') }
-      : { label: 'Role', value: project.role },
-  ]
+  const year = { label: 'Year', value: project.year }
+  switch (project.kind) {
+    case 'engineering':
+      return [year, { label: 'Stack', value: project.stack.join(' · ') }]
+    case 'concept':
+      return [year]
+    default:
+      return [year, { label: 'Role', value: project.role }]
+  }
+}
+
+// Where a project's card goes: its own page for concepts, else its case study.
+export function getProjectHref(project: Project): string {
+  return project.kind === 'concept' ? project.href : `/projects/${project.slug}`
 }
 
 export const TIMELINE: TimelineEntry[] = [
