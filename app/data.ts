@@ -709,7 +709,7 @@ export const AT_LAST = {
     { label: 'Year', value: '2026' },
   ],
   about:
-    "A high-desert hospitality estate (distillery, restaurant, villas and event venue) was preparing to raise capital. The material existed in two drafts that didn't agree: an advisory firm's dense market and financial analysis, and the founder's story outline. The goal was a deck of about 42 pages that flows, with the deeper detail moved into a data room.",
+    "A high-desert hospitality estate (distillery, restaurant, villas and event venue) was preparing to raise capital. The material existed in two drafts that didn't agree: an advisory firm's dense market and financial analysis, and the founder's story outline. The goal was a 45-slide deck that flows, with the deeper detail moved into a data room.",
   roleLead: 'Think like a PM, build like an engineer.',
   role: [
     {
