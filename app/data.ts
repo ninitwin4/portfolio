@@ -54,6 +54,9 @@ type ProjectBase = {
   // Falls back to the thumbnail when omitted.
   hero?: Media
   sections: ProjectSection[]
+  // Has its own hand-built route at app/projects/<slug>/ instead of the
+  // shared case-study template (e.g. a page with its own client palette).
+  customPage?: boolean
 }
 
 // `kind` decides the metadata around the story - which links appear, whether
@@ -305,6 +308,26 @@ export const PROJECTS: Project[] = [
         ],
       },
     ],
+  },
+  {
+    kind: 'design',
+    slug: 'at-last',
+    customPage: true,
+    title: 'AT LAST',
+    tagline:
+      'From two drafts to one investor-ready system: the deck, the teaser and the data room.',
+    tags: ['Product Design', 'Strategy', 'Hospitality', 'Real Estate'],
+    year: '2026',
+    role: 'Product Design & Strategy (part-time)',
+    links: {},
+    thumbnail: {
+      type: 'image',
+      src: '/projects/at-last/thumb.jpg',
+      alt: 'AT LAST case study: an agave field at night beside the title on an olive panel.',
+      width: 1600,
+      height: 900,
+    },
+    sections: [],
   },
   {
     kind: 'engineering',
@@ -666,12 +689,98 @@ export function getProjectHref(project: Project): string {
   return project.kind === 'concept' ? project.href : `/projects/${project.slug}`
 }
 
+// Whether app/projects/[slug] renders this project. Concepts live outside the
+// route entirely; custom pages have their own app/projects/<slug>/ route.
+export function usesSharedCaseStudy(project: Project): boolean {
+  return project.kind !== 'concept' && !project.customPage
+}
+
+// Public-tier copy for the AT LAST case study (app/projects/at-last). Client
+// confidentiality: no financial figures, and the advisory firm and founder
+// are never named.
+export const AT_LAST = {
+  eyebrow: 'Portfolio case study · Hospitality',
+  title: 'AT LAST',
+  subtitle:
+    'From two drafts to one investor-ready system: the deck, the teaser and the data room.',
+  meta: [
+    { label: 'Role', value: 'Product design & strategy' },
+    { label: 'Deliverables', value: 'Deck, teaser, data room, website' },
+    { label: 'Year', value: '2026' },
+  ],
+  about:
+    "A high-desert hospitality estate (distillery, restaurant, villas and event venue) was preparing to raise capital. The material existed in two drafts that didn't agree: an advisory firm's dense market and financial analysis, and the founder's story outline. The goal was a deck of about 42 pages that flows, with the deeper detail moved into a data room.",
+  roleLead: 'Think like a PM, build like an engineer.',
+  role: [
+    {
+      title: 'Strategy',
+      tag: 'Strategy thinking',
+      body: 'Merged the two drafts into one investor story. Set the financial model as the single source of truth, and decided what belongs in the deck and what goes to the data room.',
+    },
+    {
+      title: 'Structure',
+      tag: 'PM thinking',
+      body: 'Planned who sees what: an open teaser, the full deck under NDA, and a data room for diligence.',
+    },
+    {
+      title: 'Design',
+      tag: 'Design craft',
+      body: 'Built the design system (type, palette, grid and photo treatment) and applied it across the deck, teaser and documents. Rendered the concept site plan.',
+    },
+  ],
+  pages: [
+    {
+      src: '/projects/at-last/system.jpg',
+      alt: 'The At Last design system: olive, linen, stone and ink swatches with display and text type specimens.',
+      width: 780,
+      height: 595,
+      label: 'Design system',
+    },
+    {
+      src: '/projects/at-last/site-plan.jpg',
+      alt: 'The site plan page with its text and labels blurred.',
+      width: 1680,
+      height: 944,
+      label: 'Site plan',
+    },
+    {
+      src: '/projects/at-last/farm.jpg',
+      alt: 'The Farm & Spirit page: an agave field at night beside blurred story text.',
+      width: 1680,
+      height: 944,
+      label: 'Farm & Spirit',
+    },
+    {
+      src: '/projects/at-last/use-of-funds.jpg',
+      alt: 'The use of funds page with every figure blurred, beside a Joshua tree photo.',
+      width: 1680,
+      height: 944,
+      label: 'Use of funds · figures redacted',
+    },
+  ],
+  outcome: [
+    { value: '45', label: 'Investor deck slides' },
+    { value: '7', label: 'Story sections' },
+    { value: '3', label: 'Disclosure tiers' },
+    { value: '1', label: 'Source of truth' },
+  ],
+  closing: "If there's a problem to solve, I find a way.",
+  confidentiality: 'Financial figures blurred for client confidentiality',
+}
+
 export const TIMELINE: TimelineEntry[] = [
   {
     id: 'ai-systems-transition',
     title: 'Made the full transition to building AI systems',
     date: '2026',
     description: 'Deepening AI engineering.',
+  },
+  {
+    id: 'at-last',
+    title: 'Product design & strategy for a hospitality capital raise',
+    date: '2026',
+    description:
+      'Turned two conflicting drafts into one investor-ready deck, teaser and data room.',
   },
   {
     id: 'ai-data-operations',
