@@ -1,6 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { Spotlight } from '@/components/ui/spotlight'
 import { Magnetic } from '@/components/ui/magnetic'
@@ -31,6 +32,13 @@ const sectionHeadingClass =
 
 const pillLinkClass =
   'group relative inline-flex shrink-0 items-center gap-[1px] rounded-full border border-border bg-surface px-2.5 py-1 text-sm text-foreground transition-colors duration-200 hover:border-accent/40 hover:text-accent'
+
+// Projects shown before "View projects". The rest stay in the HTML (for
+// search, Cmd+F and print) and are only hidden until expanded.
+const VISIBLE_PROJECTS = 3
+// Remembers the expanded list for the tab, so "Back to projects" from a
+// project further down returns to an open list.
+const PROJECTS_EXPANDED_KEY = 'projects-expanded'
 
 function MagneticLink({
   children,
@@ -77,6 +85,49 @@ function MagneticLink({
 export default function Home() {
   const prefersReducedMotion = useReducedMotion() ?? false
   const sectionReveal = getSectionReveal(prefersReducedMotion)
+  const [showAllProjects, setShowAllProjects] = useState(false)
+  // Set only by a click, so restoring state on load never steals focus.
+  const moveFocus = useRef<'revealed' | 'toggle' | null>(null)
+  const firstRevealedRef = useRef<HTMLDivElement>(null)
+  const projectsToggleRef = useRef<HTMLButtonElement>(null)
+  const projectsRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem(PROJECTS_EXPANDED_KEY) === '1') {
+        setShowAllProjects(true)
+      }
+    } catch {}
+  }, [])
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(PROJECTS_EXPANDED_KEY, showAllProjects ? '1' : '0')
+    } catch {}
+    if (moveFocus.current === 'revealed') {
+      firstRevealedRef.current
+        ?.querySelector<HTMLElement>('a')
+        ?.focus({ preventScroll: true })
+    } else if (moveFocus.current === 'toggle') {
+      projectsToggleRef.current?.focus({ preventScroll: true })
+    }
+    moveFocus.current = null
+  }, [showAllProjects])
+
+  function expandProjects() {
+    moveFocus.current = 'revealed'
+    setShowAllProjects(true)
+  }
+
+  function collapseProjects() {
+    moveFocus.current = 'toggle'
+    setShowAllProjects(false)
+    // The rows above the viewport just disappeared; bring the list back up.
+    projectsRef.current?.scrollIntoView({
+      block: 'start',
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+    })
+  }
 
   return (
     <motion.main initial={false}>
@@ -172,6 +223,7 @@ export default function Home() {
 
       <motion.section
         id="projects"
+        ref={projectsRef}
         className="scroll-mt-16"
         variants={sectionReveal}
         initial="hidden"
@@ -182,15 +234,33 @@ export default function Home() {
         <h2 className={`${sectionHeadingClass} mb-5`}>
           Projects
         </h2>
-        <div className="flex flex-col gap-6">
+        <div id="project-list" className="flex flex-col gap-6">
           {PROJECTS.map((project, index) => (
-            <ProjectCard
+            <div
               key={project.slug}
-              project={project}
-              priority={index === 0}
-            />
+              ref={index === VISIBLE_PROJECTS ? firstRevealedRef : undefined}
+              hidden={!showAllProjects && index >= VISIBLE_PROJECTS}
+            >
+              <ProjectCard project={project} priority={index === 0} />
+            </div>
           ))}
         </div>
+
+        {PROJECTS.length > VISIBLE_PROJECTS && (
+          <div className="mt-6 flex justify-center">
+            <button
+              ref={projectsToggleRef}
+              type="button"
+              aria-expanded={showAllProjects}
+              aria-controls="project-list"
+              onClick={showAllProjects ? collapseProjects : expandProjects}
+              className={`${pillLinkClass} cursor-pointer gap-1.5 px-4 py-2`}
+            >
+              {showAllProjects ? 'Show fewer' : 'View projects'}
+              <span aria-hidden="true">{showAllProjects ? '↑' : '↓'}</span>
+            </button>
+          </div>
+        )}
       </motion.section>
 
       <motion.section
