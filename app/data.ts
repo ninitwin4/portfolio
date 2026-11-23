@@ -24,10 +24,40 @@ export type Media =
       caption?: string
     }
 
+// An editorial mood board: images laid out in named slots, plus a palette
+// strip, an info block and an optional stat bubble. Rendered by
+// components/mood-board.tsx; slot positions live there.
+export type MoodBoardSlot =
+  | 'hero'
+  | 'side'
+  | 'a'
+  | 'b'
+  | 'c'
+  | 'd'
+  | 'e'
+  | 'f'
+  | 'g'
+  | 'logo'
+
+export type MoodBoard = {
+  tiles: {
+    slot: MoodBoardSlot
+    src: string
+    alt: string
+    // CSS object-position for the crop, e.g. 'top' or '50% 30%'.
+    position?: string
+  }[]
+  palette: { name: string; hex: string }[]
+  details: { label: string; value: string }[]
+  stat?: { value: string; label: string; note?: string }
+  caption?: string
+}
+
 export type ProjectSection = {
   title: string
   body: string[]
   figures?: Media[]
+  board?: MoodBoard
 }
 
 // A citable deposit of the project's code - a DOI-backed software record.
@@ -76,7 +106,7 @@ type FounderProject = ProjectBase & {
 type DesignProject = ProjectBase & {
   kind: 'design'
   role: string
-  links: { live?: string; figma?: string }
+  links: { live?: string; figma?: string; video?: string }
 }
 
 // A standalone page outside the case-study route (e.g. a static HTML file in
@@ -429,6 +459,148 @@ export const PROJECTS: Project[] = [
   },
   {
     kind: 'design',
+    slug: 'tedx-cstu',
+    title: 'TEDxCSTU',
+    tagline:
+      'The full visual identity for an officially licensed TEDx event on inclusive and affordable AI education.',
+    tags: ['Visual Identity', 'Event Design', 'Print', 'Video'],
+    year: '2024',
+    role: 'Sole designer on the organizing committee',
+    links: {
+      video:
+        'https://www.youtube.com/playlist?list=PLU5Wd6udQgZst6U9Ff_LfjUH0qtZFIipM',
+    },
+    thumbnail: {
+      type: 'image',
+      src: '/projects/tedx-cstu/stage-audience.jpg',
+      alt: 'The TEDxCSTU stage seen from behind the audience: red TEDx and white CSTU letters above a round red carpet, with rows of seats on either side of the aisle.',
+      width: 1600,
+      height: 900,
+    },
+    sections: [
+      {
+        title: 'Overview',
+        body: [
+          'TEDxCSTU was an officially licensed TEDx event held on July 28, 2024, in Milpitas, CA, on the theme "Inclusive and Affordable AI Education", for about 80–100 attendees in person.',
+          "I was the sole designer on the 10–15 person organizing committee, invited by the university's co-founder after my earlier design work for CSTU. I worked from planning and ideation through design and final video editing, in Canva and Adobe Creative Cloud.",
+        ],
+      },
+      {
+        title: 'The Challenge',
+        body: [
+          'One visual identity for an AI-themed event, built within the TEDx brand guidelines.',
+        ],
+      },
+      {
+        title: 'Approach',
+        body: [
+          'The speakers and topics centered on AI and technology, so I built a modern, tech-driven visual identity.',
+          'It works within the TEDx guidelines: the signature TEDx red, with black and white typography.',
+          'Two motifs recur throughout: dotted-grid accents, and a robot hand reaching toward a human hand, linking AI with people.',
+          'Other committee members supplied speaker bios, photos, and schedules. I turned them into every visual element of the event.',
+        ],
+      },
+      {
+        title: 'Deliverables',
+        body: [
+          'The visual identity and logo files in red, white, and black variants; a printed program booklet; call-for-speakers graphics; "Our Speakers" announcement graphics; individual speaker cards; and the video intro that opens the published talks.',
+        ],
+        board: {
+          tiles: [
+            {
+              slot: 'hero',
+              src: '/projects/tedx-cstu/hero.jpg',
+              alt: 'A still from the TEDxCSTU video intro: a robot hand reaching toward a human hand in front of a glowing network sphere.',
+            },
+            {
+              slot: 'side',
+              src: '/projects/tedx-cstu/speaker-card.jpg',
+              alt: 'An "Our Speaker" card on black: a speaker photo in a red ring beside the talk topic, title and bio, with TEDxCSTU set vertically down the right edge.',
+              position: '50% 30%',
+            },
+            {
+              slot: 'a',
+              src: '/projects/tedx-cstu/booklet-cover.jpg',
+              alt: 'The program booklet cover: the TEDxCSTU logo, TEDxCSTU set vertically in red and black, the date, and red dotted-grid accents.',
+              position: 'top',
+            },
+            {
+              slot: 'b',
+              src: '/projects/tedx-cstu/booklet-schedule.jpg',
+              alt: "The booklet's schedule page: the day's sign-ins, sessions and breaks as red time pills beside a vertical red SCHEDULE band.",
+              position: 'top',
+            },
+            {
+              slot: 'c',
+              src: '/projects/tedx-cstu/speakers.jpg',
+              alt: 'An "Our Speakers" announcement on black: six speaker photos in red rings with their titles, the event date, and TEDxCSTU set vertically.',
+              position: 'top',
+            },
+            {
+              slot: 'd',
+              src: '/projects/tedx-cstu/nominate-speaker.jpg',
+              alt: 'The "Share Your Great Idea, Nominate a Great Speaker!" graphic: the TEDxCSTU logo, talk topics, the date, the venue and a QR code beside a stage microphone photo.',
+            },
+            {
+              slot: 'e',
+              src: '/projects/tedx-cstu/speakers-lineup.jpg',
+              alt: 'The full speaker lineup: 24 portraits in red rings, each with a name and title, beside a vertical red SPEAKERS band.',
+              position: '50% 30%',
+            },
+            {
+              slot: 'f',
+              src: '/projects/tedx-cstu/event-day.jpg',
+              alt: 'Four photos from event day: the designer with others in front of the TEDxCSTU backdrop and on the red carpet.',
+            },
+            {
+              slot: 'g',
+              src: '/projects/tedx-cstu/mark.jpg',
+              alt: 'The TEDx mark over the university name, from the video intro, with dotted-grid accents and a red arc.',
+            },
+            {
+              slot: 'logo',
+              src: '/projects/tedx-cstu/logo.png',
+              alt: 'The TEDxCSTU logo: TEDx in red and CSTU in black.',
+            },
+          ],
+          palette: [
+            { name: 'TEDx red', hex: '#EB0028' },
+            { name: 'Black', hex: '#000000' },
+            { name: 'White', hex: '#FFFFFF' },
+          ],
+          details: [
+            { label: 'Date', value: 'July 28, 2024' },
+            { label: 'Place', value: 'Milpitas, CA' },
+            { label: 'Theme', value: 'Inclusive and Affordable AI Education' },
+            { label: 'Role', value: 'Sole designer' },
+          ],
+          stat: {
+            value: '1.7M+',
+            label: 'views, 2024–25',
+            note: 'as of Nov 2026',
+          },
+          caption:
+            'Booklet, call-for-speakers and speaker graphics, the logo, a still from the video intro, and photos from event day.',
+        },
+      },
+      {
+        title: 'Outcome',
+        body: [
+          '16 talks from the 2024 event were published on the official TEDx Talks YouTube channel, opening with my video intro: 679,872 combined views (as of Nov 16, 2026).',
+          'The intro was reused for the 2025 TEDxCSTU event, where one talk alone has 1,061,451 views.',
+          'Together, talks opening with my intro have passed 1.7 million views.',
+        ],
+      },
+      {
+        title: 'Reflection',
+        body: [
+          'Being the only designer meant every piece, from the booklet to the speaker cards to the video intro, had to feel like one event. Building the identity first and reusing it everywhere is what made that possible. Staying on from early planning through final video editing also showed me how design decisions carry downstream, and how much smoother things go when one person holds the visual system end to end.',
+        ],
+      },
+    ],
+  },
+  {
+    kind: 'design',
     slug: 'emptorix',
     title: 'Emptorix AI',
     tagline:
@@ -666,6 +838,10 @@ export function getProjectLinks(project: Project): HeroLink[] {
       return compact([
         project.links.live && { label: 'Live site', href: project.links.live },
         project.links.figma && { label: 'Figma', href: project.links.figma },
+        project.links.video && {
+          label: 'Watch the talks',
+          href: project.links.video,
+        },
       ])
     case 'concept':
       return []
@@ -787,6 +963,13 @@ export const TIMELINE: TimelineEntry[] = [
     title: 'AI Data Operations at a robotics company',
     date: '2024',
     description: 'Supported AI model training and robotics troubleshooting.',
+  },
+  {
+    id: 'tedx-cstu',
+    title: 'Sole designer for TEDxCSTU',
+    date: '2024',
+    description:
+      'Visual identity, print, and the video intro for an officially licensed TEDx event on AI education.',
   },
   {
     id: 'design-ai-products',

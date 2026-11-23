@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ProjectMedia } from '@/components/project-media'
 import { Container } from '@/components/container'
+import { MoodBoard } from '@/components/mood-board'
 import {
   PROJECTS,
   getProject,
@@ -186,6 +187,12 @@ export default async function ProjectPage({ params }: PageProps) {
                 {section.figures.map((figure) => (
                   <Figure key={figure.src} media={figure} />
                 ))}
+              </div>
+            )}
+
+            {section.board && (
+              <div className="pt-2">
+                <MoodBoard board={section.board} />
               </div>
             )}
           </section>

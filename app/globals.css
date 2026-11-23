@@ -113,3 +113,116 @@
     background-position: 100% center;
   }
 }
+
+/* Mood board (components/mood-board.tsx). Row heights use container query
+   units so each tile keeps roughly its image's aspect at any width. */
+.mood-board {
+  container-type: inline-size;
+}
+
+.mood-board-dots {
+  width: 72px;
+  height: 18px;
+  background-image: radial-gradient(#eb0028 1.6px, transparent 1.8px);
+  background-size: 9px 9px;
+}
+
+.mood-board-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    'hero hero'
+    'side a'
+    'b c'
+    'd d'
+    'e e'
+    'f f'
+    'g g'
+    'logo logo'
+    'palette palette'
+    'info info';
+}
+
+.mood-board-grid > [data-slot] {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+/* Hairline edge so tiles whose image is itself black still read as tiles. */
+.mood-board-grid > [data-slot]:not([data-slot='palette']):not([data-slot='info'])::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
+  pointer-events: none;
+}
+
+.mood-board-grid > [data-slot='palette'],
+.mood-board-grid > [data-slot='info'] {
+  overflow: visible;
+  padding: 4px 2px;
+}
+
+.mood-board-grid > [data-slot='hero'] { grid-area: hero; aspect-ratio: 16 / 9; }
+.mood-board-grid > [data-slot='side'] { grid-area: side; aspect-ratio: 3 / 4; }
+.mood-board-grid > [data-slot='a'] { grid-area: a; aspect-ratio: 3 / 4; }
+.mood-board-grid > [data-slot='b'] { grid-area: b; aspect-ratio: 3 / 4; }
+.mood-board-grid > [data-slot='c'] { grid-area: c; aspect-ratio: 3 / 4; }
+.mood-board-grid > [data-slot='d'] { grid-area: d; aspect-ratio: 3 / 2; }
+.mood-board-grid > [data-slot='e'] { grid-area: e; aspect-ratio: 3 / 2; }
+.mood-board-grid > [data-slot='f'] { grid-area: f; aspect-ratio: 1; }
+.mood-board-grid > [data-slot='g'] { grid-area: g; aspect-ratio: 16 / 9; }
+.mood-board-grid > [data-slot='logo'] { grid-area: logo; aspect-ratio: 3 / 1; }
+.mood-board-grid > [data-slot='palette'] { grid-area: palette; }
+.mood-board-grid > [data-slot='info'] { grid-area: info; }
+
+.mood-board-stat {
+  position: absolute;
+  right: 4%;
+  bottom: 6%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  background: #eb0028;
+  color: #fff;
+  text-align: center;
+  font-size: clamp(16px, 6.5cqw, 30px);
+  box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.7);
+}
+
+@media (min-width: 640px) {
+  .mood-board-grid {
+    gap: 1.4cqw;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    /* Row 4 is one 4-column width tall, so the square event photo (f) shows
+       whole. */
+    grid-template-rows: 41.4cqw 43.2cqw 32.9cqw 32.4cqw auto;
+    grid-template-areas:
+      'hero hero hero hero hero hero hero hero side side side side'
+      'a a a a b b b b c c c c'
+      'd d d d d d e e e e e e'
+      'f f f f g g g g g g g g'
+      'logo logo logo logo palette palette palette palette info info info info';
+  }
+
+  .mood-board-grid > [data-slot] {
+    aspect-ratio: auto;
+  }
+
+  .mood-board-grid > [data-slot='logo'] {
+    aspect-ratio: auto;
+    min-height: 18cqw;
+  }
+
+  .mood-board-stat {
+    width: 22%;
+    font-size: clamp(14px, 3.4cqw, 28px);
+  }
+}
